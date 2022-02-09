@@ -7,16 +7,16 @@ Als Name Conventions werden drei Unterschiedliche verwendet, je nach aktuellem b
 - Für Ordner gilt lowerCase
 - Für Datein gilt PascalCase
 - Für Methoden und Variablen gilt CamelCase
+> Raw: user login -->
+> Lower Case: userlogin
+> 
+>
 > Raw: user login count -->
 > Camel Case: userLoginCount
 >
 >
 > Raw: user login manager -->
 > Pascal Case: UserLoginManager
->
->
-> Raw: user login -->
-> Pascal Case: userlogin
 
 
 
