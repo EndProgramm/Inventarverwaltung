@@ -8,22 +8,22 @@ class Model:
     def __init__(self, db_name="Inventar.db"):
         self.db = db_name
 
-    def suchanfrage_GLEICH(self, tabelle, spalte, wert):
+    def suchanfrage_GLEICH(self, tabelle, attribut, wert):
         con = sqlite.connect(self.db)
         cur = con.cursor()
 
-        sql = f"SELECT {spalte} FROM {tabelle} WHERE {spalte} = {wert}"
+        sql = f"SELECT * FROM {tabelle} WHERE {attribut} = {wert}"
         cur.execute(sql)
 
-        return cur.fetchall()
+        return cur.fetchall()  # rückgabe in form [()]
 
-    def suchanfrage_LIKE(self, tabelle, spalte, wert):
+    def suchanfrage_LIKE(self, tabelle, attribut, wert):
         con = sqlite.connect(self.db)
         cur = con.cursor()
 
-        sql = f"SELECT {spalte} FROM {tabelle} WHERE {spalte} LIKE {wert}"
+        sql = f"SELECT * FROM {tabelle} WHERE {attribut} LIKE {wert}"
         cur.execute(sql)
-        return cur.fetchall()
+        return cur.fetchall()  # rückgabe in form [()]
 
     def datensatz_loeschen(self, mId):
         connection = sqlite.connect(self.db)
