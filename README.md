@@ -3,29 +3,21 @@
 Ein Projekt zur verwaltung des Inventares der GHO
 
 ## Code Style
-Als Name Conventions werden drei Unterschiedliche verwendet, je nach aktuellem bedarf.
-- Für Ordner gilt lowerCase
+Als Namens-Konventionen werden drei Unterschiedliche verwendet, je nach aktuellem Bedarf.
+- Für Ordner(Pakete) und Dateien gilt lowercase
 - Für Datein gilt PascalCase
-- Für Methoden und Variablen gilt CamelCase
-> Raw: user login -->
-> Lower Case: userlogin
-> 
->
+- Für Methoden und Variablen gilt camelCase
+
 > Raw: user login count -->
 > Camel Case: userLoginCount
 >
 >
 > Raw: user login manager -->
 > Pascal Case: UserLoginManager
-
-
-
-
-
-
-
-
-
+>
+>
+> Raw: user login -->
+> Lower Case: userlogin
 
 
 
