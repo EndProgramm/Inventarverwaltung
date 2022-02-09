@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 # Controller für die Inventarverwaltung
 
-from Inventarverwaltung.Inventarverwaltung import Model
+from Model import Model
+from View import View
 
 
 class Controller:
