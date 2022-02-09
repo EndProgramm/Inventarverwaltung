@@ -9,6 +9,14 @@ class Model:
         con = sqlite.connect(self.db)
         cur = con.cursor()
         sql = f"SELECT {spalte} FROM {tabelle} WHERE {spalte} = {wert}"
+    
+    def datensatz_loeschen(self, mId):
+        connection = sql.connect("Inventar.db")
+        cursor = connection.cursor()
+        sql="DELETE FROM Material WHERE id='"+mId+"';"
+        cursor.execute(sql)
+        connection.commit()
+        connection.close()
 
 
 
