@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 # Controller für die Inventarverwaltung
 
-from Model import Model
-from View import View
+from model.datenbank import DB
+from view.ui import UIApp
 
 
 class Controller:
     def __init__(self):
-        self.model = Model()
-        self.view = View()
+        self.model = DB()
+        self.view = UIApp()
+
+        # Code hier
+
+        self.view.run()
 
 
 if __name__ == '__main__':

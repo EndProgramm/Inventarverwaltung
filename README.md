@@ -3,10 +3,11 @@
 Ein Projekt zur verwaltung des Inventares der GHO
 
 ## Code Style
-Als Name Conventions werden drei Unterschiedliche verwendet, je nach aktuellem bedarf.
-- Für Ordner gilt lowerCase
+Als Namens-Konventionen werden drei Unterschiedliche verwendet, je nach aktuellem Bedarf.
+- Für Ordner(Pakete) und Dateien gilt lowercase
 - Für Datein gilt PascalCase
-- Für Methoden und Variablen gilt CamelCase
+- Für Methoden und Variablen gilt camelCase
+
 > Raw: user login count -->
 > Camel Case: userLoginCount
 >
@@ -16,17 +17,7 @@ Als Name Conventions werden drei Unterschiedliche verwendet, je nach aktuellem b
 >
 >
 > Raw: user login -->
-> Pascal Case: userlogin
-
-
-
-
-
-
-
-
-
-
+> Lower Case: userlogin
 
 
 [![forthebadge](https://forthebadge.com/images/badges/made-with-python.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com) [![forthebadge](https://forthebadge.com/images/badges/built-by-developers.svg)](https://forthebadge.com)
