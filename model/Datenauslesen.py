@@ -1,4 +1,4 @@
-#Daten aus der Datenbank auskesen
+#Daten aus der Datenbank auslesen
 #Lisa-Marie Frauböse, Malte Reimer
 
 import os, sqlite3
