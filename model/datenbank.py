@@ -50,6 +50,13 @@ class DB:
         connection.commit()
         connection.close()
 
+    def einfuegen(self, typ, name, raum, kategorie, ausgeliehen="", status="", anzahl="", bemerkung=""):
+        connection = sqlite.connect("Inventar.db")
+        cursor = connection.cursor()
+        sql = "INSERT INTO material (Typ, Name, Raum, Kategorie, Ausgeliehen, Status, Anzahl, Bemerkung) VALUES (" + typ + ", " + name + ", " + raum + ", " + kategorie + ", " + ausgeliehen + ", " + status + ", " + anzahl + ", " + bemerkung + ")"
+        cursor.execute(sql)
+        connection.commit()
+        connection.close()
 
 if __name__ == '__main__':
     # Für tests
