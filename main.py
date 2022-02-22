@@ -64,12 +64,7 @@ class Table(BoxLayout):
     def __init__(self, table='', **kwargs):
         super().__init__(**kwargs)
 
-        abfrage = control.getData()
-        erg = [[spalte] for spalte in ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Status', 'Anzahl', 'Bemerkung']]
-        for liste in abfrage:
-            for i, element in enumerate(liste):
-                erg[i].append(element)
-        data = {zeile[0] if len(zeile) > 0 else print(len(zeile)): {i: spalte for i, spalte in enumerate(zeile[1:])} for zeile in erg}
+        data = control.getData()
 
         column_titles = [x for x in data.keys()]
         rows_length = len(data[column_titles[0]])
@@ -84,8 +79,8 @@ class Table(BoxLayout):
                 self.table_data.append(
                     {'text': str(data[y][z]), 'size_hint_y': None, 'height': 20, 'bcolor': (.06, .25, .50, 1)})
 
-        # self.ids.table_floor_layout.cols = self.columns  # define value of cols to the value of self.columns
-        # self.ids.table_floor.data = self.table_data  # add self.table_data to data value
+        # self.ids.table_floor_layout.cols = self.columns   # define value of cols to the value of self.columns
+        # self.ids.table_floor.data = self.table_data       # add self.table_data to data value
 
 
 class UIApp(App):

@@ -15,6 +15,12 @@ class DB:
     def __init__(self, db_name="inventar.db"):
         self.name = db_name
 
+    def getAll(self) -> tuple[tuple]:
+        """
+        Gibt alle Daten aus der Gegenstandstabelle zurück
+        """
+        return cur.fetchall()
+
     def suchanfrage_GLEICH(self, tabelle: str, attribut: str, wert: str) -> list[tuple]:
         """
         Suchanfrage nach identischen Wert von wert zu attribut\n
