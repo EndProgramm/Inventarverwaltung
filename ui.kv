@@ -1,0 +1,134 @@
+#:kivy 2.0.0
+#:import Widget kivy.uix.widget
+
+<AddInv>
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        GridLayout:
+            cols: 3
+            padding: 10
+            spacing: 10
+            Button:
+                id: "addConsum"
+                text: "Verbrauch"
+                on_release:
+                    root.manager.current = "addConsum"
+                    root.manager.transition.direction = "right"
+            Button:
+                id: "addUses"
+                text: "Gebrauch"
+                on_release:
+                    root.manager.current = "addUses"
+                    root.manager.transition.direction = "right"
+            Button:
+                id: "showAll"
+                text: "Inventar"
+                on_release:
+                    root.manager.current = "showAll"
+                    root.manager.transition.direction = "up"
+        Label:
+            size_hint: (2.0,2.0)
+
+<AddConsum>
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        GridLayout:
+            cols: 2
+            padding: 10
+            spacing: 10
+            Label:
+                text: "Bezeichnung:"
+            TextInput:
+                multiline: False
+            Label:
+                text: "Standort:"
+            TextInput:
+                multiline: False
+            Label:
+                text: "Bemerkung:"
+            TextInput
+            Label:
+                text: "Menge:"
+            TextInput:
+                multiline: False
+            Button:
+                text: "<< zurück"
+                on_release:
+                    root.manager.current = "addInv"
+                    root.manager.transition.direction = "left"
+            Button:
+                text: "Speichern"
+                on_release:
+                    root.saveInv()
+
+<AddUses>
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        GridLayout:
+            cols: 2
+            padding: 10
+            spacing: 10
+            Label:
+                text: "Bezeichnung"
+            TextInput:
+                multiline: False
+            Label:
+                text: "Standort:"
+            TextInput:
+                multiline: False
+            Label:
+                text: "Bemerkung:"
+            TextInput
+            Label:
+                text: "Kategorie:"
+            Spinner:
+                text: "Kategorie"
+                values: "Computer", "Mobiliar", "Drucker"
+            Label:
+                text: "Ausleihbar:"
+            CheckBox
+            Button:
+                text: "<< zurück"
+                on_release:
+                    root.manager.current = "addInv"
+                    root.manager.transition.direction = "left"
+            Button:
+                text: "Speichern"
+                on_release:
+                    root.saveInv()
+
+<ShowAll>
+    Table:
+        id: 'table'
+#        Label:
+#            id: "showAllEntry"
+#            text: root.inhalt
+#            text_size: root.width, root.height
+
+<Table>:
+    id: 'main_win'
+    RecycleView:
+        viewclass: 'CustomLabel'
+        id: 'table_floor'
+        data: root.table_data
+        RecycleGridLayout:
+            id: 'table_floor_layout'
+            cols: root.columns
+            default_size: (None,250)
+            default_size_hint: (1,None)
+            size_hint_y: None
+            height: self.minimum_height
+            spacing: 5
+
+
+<CustomLabel@Button>:
+    bcolor: (1, 1, 1, 1)
+    canvas.before:
+        Color:
+            rgba: root.bcolor
+        Rectangle:
+            size: self.size
+            pos: self.pos
