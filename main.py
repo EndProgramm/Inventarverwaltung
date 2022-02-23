@@ -57,7 +57,6 @@ class RV(RecycleView):
         abfage = control.getData()
         self.data = {int(key): {spalte: str(wert) for spalte, wert in enumerate(inhalt)} for key, inhalt in
                      enumerate(abfage)}
-        print(self.data)
 
 
 class Table(BoxLayout):
@@ -82,19 +81,22 @@ class Table(BoxLayout):
         # self.ids.table_floor_layout.cols = self.columns   # define value of cols to the value of self.columns
         # self.ids.table_floor.data = self.table_data       # add self.table_data to data value
 
+    def callback_suche(self, text):
+        print(text)
+
 
 class UIApp(App):
     """
     Basis der UI
     """
     def build(self):
-        Window.size = (350, 400)
+        Window.size = (800, 600)
         sManage = ScreenManager()
         sManage.add_widget(AddInv(name='addInv'))
         sManage.add_widget(AddConsum(name='addConsum'))
         sManage.add_widget(AddUses(name='addUses'))
         sManage.add_widget(ShowAll(name='showAll'))
-        sManage.current = 'addInv'
+        sManage.current = 'showAll'
         return sManage
 
 

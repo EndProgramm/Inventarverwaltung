@@ -1,5 +1,7 @@
 #:kivy 2.0.0
 #:import Widget kivy.uix.widget
+#:import BoxLayout kivy.uix.boxlayout
+#:import Clock kivy.clock.Clock
 
 <AddInv>
     GridLayout:
@@ -110,21 +112,50 @@
 
 <Table>:
     id: 'main_win'
-    RecycleView:
-        viewclass: 'CustomLabel'
-        id: 'table_floor'
-        data: root.table_data
-        RecycleGridLayout:
-            id: 'table_floor_layout'
-            cols: root.columns
-            default_size: (None,250)
-            default_size_hint: (1,None)
-            size_hint_y: None
-            height: self.minimum_height
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: (5, 5)
+        spacing: 5
+        BoxLayout:
+            size_hint: 1, 0.05
+            orientation: 'horizontal'
             spacing: 5
+            TextInput:
+                id: suchfeld
+
+                size_hint: 0.3, 1
+                size_hint_max_x: 300
+
+                background_color: (1, 1, 1, 0.8)
+                multiline: False
+                text: 'Suche'
+#                text_language: 'de'
+#                suggestion_text: 'Jep'
+
+                on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+                on_text_validate:
+                    root.callback_suche(self.text)
+            Button:
+                size_hint: 0.1, 1
+                size_hint_max_x: 50
+                on_release:
+                    root.callback_suche(suchfeld.text)
+        RecycleView:
+            viewclass: 'CustomLabel'
+            id: 'table_floor'
+            data: root.table_data
+            RecycleGridLayout:
+                id: 'table_floor_layout'
+                cols: root.columns
+                default_size: (None,250)
+                default_size_hint: (1,None)
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: 5
 
 
-<CustomLabel@Button>:
+<CustomLabel@Label>:
     bcolor: (1, 1, 1, 1)
     canvas.before:
         Color:
