@@ -19,4 +19,20 @@ class Model():
         sql = "SELECT * FROM Material WHERE Name OR Bemerkung LIKE '%"+search+"%'"
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
+    
+    def addInventory(self, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Values as String with Value, Empty → None
+        self.zeiger.execute('INSERT INTO "Material" (Name, Typ, Kategorie, Raum, Ausgeliehen, Status, Anzahl, Bemerkung) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung))
+        id = self.zeiger.lastrowid
+        self.verbindung.commit()
+        return(id)
+    
+    def deleteInventory(self, mId):
+        sql = "DELETE FROM Material WHERE id='"+mId+"';"
+        self.zeiger.execute(sql)
+        self.verbindung.commit()
+
+
+if __name__ == '__main__':
+    # Für tests
+    pass
 
