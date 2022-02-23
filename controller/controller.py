@@ -10,13 +10,23 @@ class Controller:
 
     def getData(self) -> dict[dict]:
         abfrage = self.model.getAll()
-        erg = [[spalte] for spalte in ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Status', 'Anzahl', 'Bemerkung']]
+        erg = [[spalte] for spalte in
+               ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Status', 'Anzahl', 'Bemerkung']]
         for liste in abfrage:
             for i, element in enumerate(liste):
                 erg[i].append(element)
-        return {zeile[0] if len(zeile) > 0 else print(len(zeile)): {i: spalte for i, spalte in enumerate(zeile[1:])} for zeile in erg}
+        return {zeile[0] if len(zeile) > 0 else print(len(zeile)): {i: spalte for i, spalte in enumerate(zeile[1:])} for
+                zeile in erg}
 
-    def saveUses(self) -> bool:
+    def saveObejct(self, newObject: []) -> bool:
+        if len(newObject) < 8:  # Number is not correct - Just a test value
+            raise Exception('Missing arguments')
+        else:
+            # run model
+            # if object exists update object, if not insert it
+            pass
+
+    def delObject(self) -> bool:
         pass
 
 
