@@ -18,7 +18,7 @@ class Controller:
         return {zeile[0] if len(zeile) > 0 else print(len(zeile)): {i: spalte for i, spalte in enumerate(zeile[1:])} for
                 zeile in erg}
 
-    def saveUses(self, newObject: []) -> bool:
+    def saveObejct(self, newObject: []) -> bool:
         if len(newObject) < 8:  # Number is not correct - Just a test value
             raise Exception('Missing arguments')
         else:
@@ -26,18 +26,7 @@ class Controller:
             # if object exists update object, if not insert it
             pass
 
-    def delUses(self) -> bool:
-        pass
-
-    def saveConsum(self, newObject: []) -> bool:
-        if len(newObject) < 8:  # Number is not correct - Just a test value
-            raise Exception('Missing arguments')
-        else:
-            # run model
-            # if object exists update object, if not insert it
-            pass
-
-    def delConsum(self) -> bool:
+    def delObject(self) -> bool:
         pass
 
 
