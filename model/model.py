@@ -34,6 +34,11 @@ class Model():
     def updateInventory(self,id, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Values as String with Value, Empty → None
         self.zeiger.execute('UPDATE "Material" SET Name = ?, Typ = ?, Kategorie = ?, Raum = ?, Ausgeliehen = ?, Status = ?, Anzahl = ?, Bemerkung = ? WHERE MID = ?;', (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung,id))
         self.verbindung.commit()
+        
+    def sortInventory(self,row, direction):
+        sql = "SELECT * from Material ORDER BY {}".format(row)+" "+direction+""
+        self.zeiger.execute(sql)
+        return [dsatz for dsatz in self.zeiger]
 
 
 if __name__ == '__main__':
