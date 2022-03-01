@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 # Controller für die Inventarverwaltung
 
-from model.datenbank import DB
+from model.model import Model
 
 
 class Controller:
     def __init__(self):
-        self.model = DB()
+        self.model = Model()
 
     def getData(self) -> dict[dict]:
         abfrage = self.model.getAll()

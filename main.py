@@ -20,8 +20,10 @@ from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.floatlayout import FloatLayout
 
 from controller.controller import Controller
+
 control = Controller()
 
 
@@ -35,6 +37,10 @@ class AddConsum(Screen):
                       content=Label(text="Neues Verbrauchsmaterial\nwurde gespeichert!"),
                       size_hint=(None, None), size=(200, 100))
         popup.open()
+
+
+class Popups(FloatLayout):
+    popup_close = ObjectProperty(None)
 
 
 class ShowAll(Screen):
@@ -84,11 +90,22 @@ class Table(BoxLayout):
     def callback_suche(self, text):
         print(text)
 
+    def filter(self):
+        show = Popups(popup_close=self.popup_close)
+        self.popupWindow = Popup(title="Filter", title_align="center",
+                                 content=show, auto_dismiss=True,
+                                 size_hint=(None, None), size=(300, 400))
+        self.popupWindow.open()
+
+    def popup_close(self):
+        self.popupWindow.dismiss()
+
 
 class UIApp(App):
     """
     Basis der UI
     """
+
     def build(self):
         Window.size = (800, 600)
         sManage = ScreenManager()

@@ -141,6 +141,12 @@
                 size_hint_max_x: 50
                 on_release:
                     root.callback_suche(suchfeld.text)
+            Button:
+                size_hint: 0.1, 1
+                size_hint_max_x: 50
+                text: "Filter"
+                on_release:
+                    root.filter()
         RecycleView:
             viewclass: 'CustomLabel'
             id: 'table_floor'
@@ -154,6 +160,61 @@
                 height: self.minimum_height
                 spacing: 5
 
+<Popups>
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        pos: root.pos
+        GridLayout:
+            cols: 2
+            padding: 10
+            spacing: 10
+            Label:
+                text:"Typ:"
+            Spinner:
+                text: "kein Filter"
+                values: "kein Filter", "Gebrauch", "Verbrauch" #Wenn nicht ausgewählt wird, dann kein Filter
+            Label:
+                text: "Kategorie:"
+            Spinner:
+                text: "kein Filter"
+                values: "kein Filter","Computer", "Mobiliar", "Drucker"
+            Label:
+                text: "Raum:"
+            TextInput:
+                multiline: False
+            Label:
+                text: "Zustand:"
+            Spinner:
+                text: "kein Filter"
+                values: "kein Filter", "funktionsfähig", "defekt"
+            Label:
+                text:"Anzahl:"
+            BoxLayout:
+                orientation: "horizontal"
+                cols: 4
+                Label:
+                    text:"von"
+                TextInput
+                Label:
+                    text:"bis"
+                TextInput
+            Label:
+                text: "Ausleihbarkeit:"
+            Spinner:
+                text: "kein Filter"
+                values: "kein Filter", "ausleihbar", "ausgeliehen"
+        Button:
+            text: "zurück"
+            size_hint: 1, 0.1
+            on_release:
+                root.popup_close()
+        Button:
+            text: "speichern"
+            size_hint: 1, 0.1
+            on_release:
+                root.popup_close()
+            multiline: False
 
 <CustomLabel@Label>:
     bcolor: (1, 1, 1, 1)
