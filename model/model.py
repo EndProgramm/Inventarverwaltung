@@ -49,6 +49,11 @@ class Model():
         sql += " LIKE '%"+search+"%' ORDER BY {}".format(sortcolumn)+" "+direction+""
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
+    
+    def getColumns():
+        sql = "select name FROM pragma_table_info('Material') as tblInfo"
+        self.zeiger.execute(sql)
+        return [dsatz for dsatz in self.zeiger]
 
 
 if __name__ == '__main__':
