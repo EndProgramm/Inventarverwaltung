@@ -41,6 +41,24 @@ class AddConsum(Screen):
 
 class Popups(FloatLayout):
     popup_close = ObjectProperty(None)
+    typ_spinner=ObjectProperty()
+    kategorie_spinner=ObjectProperty()
+    raum_ent=ObjectProperty()
+    zustand_spinner=ObjectProperty()
+    anzahl_von_ent=ObjectProperty()
+    anzahl_bis_ent=ObjectProperty()
+    ausleihbar_spinner = ObjectProperty()
+    def speichern(self):
+        dict = {
+            "typ": self.typ_spinner.text,
+            "kategorie": self.kategorie_spinner.text,
+            "raum": self.raum_ent.text,
+            "zustand": self.zustand_spinner.text,
+            "anzahl_von": self.anzahl_von_ent.text,
+            "anzahl_bis": self.anzahl_bis_ent.text,
+            "ausleibahrkeit": self.ausleihbar_spinner.text
+        }
+        print(dict)
 
 
 class ShowAll(Screen):
@@ -99,6 +117,8 @@ class Table(BoxLayout):
 
     def popup_close(self):
         self.popupWindow.dismiss()
+
+
 
 
 class UIApp(App):

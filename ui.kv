@@ -161,6 +161,14 @@
                 spacing: 5
 
 <Popups>
+    typ_spinner: typ
+    kategorie_spinner: kategorie
+    raum_ent: raum
+    zustand_spinner: zustand
+    anzahl_von_ent: anzahl_von
+    anzahl_bis_ent: anzahl_bis
+    ausleihbar_spinner: ausleihbar
+
     GridLayout:
         cols: 1
         size: root.width, root.height
@@ -172,20 +180,24 @@
             Label:
                 text:"Typ:"
             Spinner:
+                id: typ
                 text: "kein Filter"
                 values: "kein Filter", "Gebrauch", "Verbrauch" #Wenn nicht ausgewählt wird, dann kein Filter
             Label:
                 text: "Kategorie:"
             Spinner:
+                id: kategorie
                 text: "kein Filter"
                 values: "kein Filter","Computer", "Mobiliar", "Drucker"
             Label:
                 text: "Raum:"
             TextInput:
+                id: raum
                 multiline: False
             Label:
                 text: "Zustand:"
             Spinner:
+                id: zustand
                 text: "kein Filter"
                 values: "kein Filter", "funktionsfähig", "defekt"
             Label:
@@ -195,15 +207,22 @@
                 cols: 4
                 Label:
                     text:"von"
-                TextInput
+                TextInput:
+                    id: anzahl_von
+                    multiline: False
+
                 Label:
                     text:"bis"
-                TextInput
+                TextInput:
+                    id: anzahl_bis
+                    multiline: False
             Label:
                 text: "Ausleihbarkeit:"
             Spinner:
+                id: ausleihbar
                 text: "kein Filter"
                 values: "kein Filter", "ausleihbar", "ausgeliehen"
+
         Button:
             text: "zurück"
             size_hint: 1, 0.1
@@ -214,6 +233,7 @@
             size_hint: 1, 0.1
             on_release:
                 root.popup_close()
+                root.speichern()
             multiline: False
 
 <CustomLabel@Label>:
