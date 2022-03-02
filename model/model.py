@@ -35,8 +35,18 @@ class Model():
         self.zeiger.execute('UPDATE "Material" SET Name = ?, Typ = ?, Kategorie = ?, Raum = ?, Ausgeliehen = ?, Status = ?, Anzahl = ?, Bemerkung = ? WHERE MID = ?;', (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung,id))
         self.verbindung.commit()
         
-    def sortInventory(self,row, direction):
-        sql = "SELECT * from Material ORDER BY {}".format(row)+" "+direction+""
+    def altsortInventory(self, column, direction):
+        sql = "SELECT * from Material ORDER BY {}".format(column)+" "+direction+""
+        self.zeiger.execute(sql)
+        return [dsatz for dsatz in self.zeiger]
+    
+    def sortInventory(self, search, direction, sortcolumn = "MID", filtercolumn = None):
+        sql = "SELECT * from Material"
+        if filtercolumn != None:
+            sql += " WHERE {}".format(filtercolumn)
+        else:
+            sql += " WHERE Name OR Bemerkung"
+        sql += " LIKE '%"+search+"%' ORDER BY {}".format(sortcolumn)+" "+direction+""
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
 
