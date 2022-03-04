@@ -54,6 +54,12 @@ class Model():
         sql = "select name FROM pragma_table_info('Material') as tblInfo"
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
+    
+    def data_check(self,name,typ,kategorie,raum,id="%%"):
+        self.zeiger.execute('SELECT * FROM "Material" WHERE Name = ? And Typ = ? AND Kategorie = ? AND Raum = ? and MID LIKE ?;', (name,typ,kategorie,raum,id))
+        if self.zeiger.fetchall()!=[]:
+            return True
+        return False
 
 
 if __name__ == '__main__':

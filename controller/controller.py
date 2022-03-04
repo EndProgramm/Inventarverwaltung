@@ -32,8 +32,15 @@ class Controller:
 
     def delObject(self) -> bool:
         pass
+    
+    def getKategorie(self):
+        kategorie=[]
+        for i in self.model.getColumns():
+            kategorie.append(i[0])
+        return kategorie
 
 
 if __name__ == '__main__':
     # Für tests des Controllers (Achtung greift natürlich trotzdem auf die anderen Teile zu!)
     c = Controller()
+    c.getKategorie
