@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Controller für die Inventarverwaltung
+import pprint
 
 from model.model import Model
 
@@ -30,7 +31,8 @@ class Controller:
         return {'ID': ID, 'Name': "null", 'Type': "null", 'Kategorie': "null", 'Ausgeliehen': "null", 'Status': "null",
                 'Anzahl': "null", 'Bemerkung': "null"}
 
-    def delObject(self) -> bool:
+    def delObject(self, ID: int) -> bool:
+        self.model.deleteInventory(ID)
         pass
 
     def getKategorie(self):
