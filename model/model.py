@@ -60,6 +60,10 @@ class Model():
         if self.zeiger.fetchall()!=[]:
             return True
         return False
+    
+    def id_data(self,id):
+        self.zeiger.execute('SELECT * FROM "Material" WHERE MID = ?;', (id))
+        return(self.zeiger.fetchall())[0]
 
 
 if __name__ == '__main__':
