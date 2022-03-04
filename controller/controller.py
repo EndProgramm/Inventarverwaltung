@@ -9,7 +9,7 @@ class Controller:
         self.model = Model()
 
     def getData(self) -> dict[dict]:
-        abfrage = self.model.getAll()
+        abfrage = self.model.getInventory()
         erg = [[spalte] for spalte in
                ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Status', 'Anzahl', 'Bemerkung']]
         for liste in abfrage:
@@ -32,12 +32,9 @@ class Controller:
 
     def delObject(self) -> bool:
         pass
-    
+
     def getKategorie(self):
-        kategorie=[]
-        for i in self.model.getColumns():
-            kategorie.append(i[0])
-        return kategorie
+        return [i[0] for i in self.model.getColumns()]
 
 
 if __name__ == '__main__':
