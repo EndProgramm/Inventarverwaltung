@@ -60,7 +60,7 @@ class Model():
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-        def data_check(self,name,typ,kategorie,raum,id="%%"):
+    def data_check(self,name,typ,kategorie,raum,id="%%"):
         self.zeiger.execute('SELECT * FROM "Material" WHERE Name = ? And Typ = ? AND Kategorie = ? AND Raum = ? and MID LIKE ?;', (name,typ,kategorie,raum,id))
         if self.zeiger.fetchall()!=[]:
             return True
