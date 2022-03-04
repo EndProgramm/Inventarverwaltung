@@ -50,7 +50,7 @@ class Model():
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def getColumns():
+    def getColumns(self):
         sql = "select name FROM pragma_table_info('Material') as tblInfo"
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
