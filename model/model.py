@@ -59,6 +59,16 @@ class Model():
         sql = "SELECT Kategorie FROM Material group by Kategorie"
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
+    
+        def data_check(self,name,typ,kategorie,raum,id="%%"):
+        self.zeiger.execute('SELECT * FROM "Material" WHERE Name = ? And Typ = ? AND Kategorie = ? AND Raum = ? and MID LIKE ?;', (name,typ,kategorie,raum,id))
+        if self.zeiger.fetchall()!=[]:
+            return True
+        return False
+    
+    def id_data(self,id):
+        self.zeiger.execute('SELECT * FROM "Material" WHERE MID = ?;', (id))
+        return(self.zeiger.fetchall())[0]
 
 
 if __name__ == '__main__':
