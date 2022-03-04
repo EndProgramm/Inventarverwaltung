@@ -34,7 +34,7 @@ class Controller:
         pass
 
     def getKategorie(self):
-        return [i[0] for i in self.model.getColumns()]
+        return [i[0] for i in self.model.getKategorien()]
 
 
 if __name__ == '__main__':
