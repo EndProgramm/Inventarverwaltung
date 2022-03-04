@@ -5,7 +5,7 @@ class Model():
         self.verbindung = sqlite3.connect("inventar.db")
         self.zeiger = self.verbindung.cursor()
 
-    def getInventory(self):
+    def getInventory(self): #Ausgabe aller Datensätze
         sql = 'SELECT * FROM Material;'
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
@@ -20,27 +20,27 @@ class Model():
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def addInventory(self, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Values as String with Value, Empty → None
+    def addInventory(self, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Einfügen eines Datensatzes(Values as String with Value, Empty → None)
         self.zeiger.execute('INSERT INTO "Material" (Name, Typ, Kategorie, Raum, Ausgeliehen, Status, Anzahl, Bemerkung) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung))
-        id = self.zeiger.lastrowid
+        mid = self.zeiger.lastrowid
         self.verbindung.commit()
-        return(id)
+        return(mid)
     
-    def deleteInventory(self, mId):
-        sql = "DELETE FROM Material WHERE id='"+mId+"';"
+    def deleteInventory(self, mId):#Löschen eines Datensatzes
+        sql = "DELETE FROM Material WHERE mid='"+mId+"';"
         self.zeiger.execute(sql)
         self.verbindung.commit()
         
-    def updateInventory(self,id, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Values as String with Value, Empty → None
-        self.zeiger.execute('UPDATE "Material" SET Name = ?, Typ = ?, Kategorie = ?, Raum = ?, Ausgeliehen = ?, Status = ?, Anzahl = ?, Bemerkung = ? WHERE MID = ?;', (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung,id))
+    def updateInventory(self,mid, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Updaten eines Datensatzes (Values as String with Value, Empty → None)
+        self.zeiger.execute('UPDATE "Material" SET Name = ?, Typ = ?, Kategorie = ?, Raum = ?, Ausgeliehen = ?, Status = ?, Anzahl = ?, Bemerkung = ? WHERE MID = ?;', (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung,mid))
         self.verbindung.commit()
         
-    def altsortInventory(self, column, direction):
+    def altsortInventory(self, column, direction): #Sortieren, dass keine Suche und Filterung berücksichtigt
         sql = "SELECT * from Material ORDER BY {}".format(column)+" "+direction+""
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def sortInventory(self, search, direction, sortcolumn = "MID", filtercolumn = None):
+    def sortInventory(self, search, direction, sortcolumn = "MID", filtercolumn = None): #Sortieren, welches Suche und Filterung berücksichtigt
         sql = "SELECT * from Material"
         if filtercolumn != None:
             sql += " WHERE {}".format(filtercolumn)
@@ -50,25 +50,26 @@ class Model():
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def getColumns(self):
+    def getColumns(self): #Ausgabe aller Spaltennamen
         sql = "select name FROM pragma_table_info('Material') as tblInfo"
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def getKategorien(self):
+    def getKategorien(self):# Ausgabe aller vorhandenen Kategorien
         sql = "SELECT Kategorie FROM Material group by Kategorie"
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def data_check(self,name,typ,kategorie,raum,id="%%"):
-        self.zeiger.execute('SELECT * FROM "Material" WHERE Name = ? And Typ = ? AND Kategorie = ? AND Raum = ? and MID LIKE ?;', (name,typ,kategorie,raum,id))
+    def checkInventory(self,name,typ,kategorie,raum,mid="%%"):#Überprüfung anhand Name Typ Kategorie und Raum ob ein Datensatz bereits vorhanden ist
+        self.zeiger.execute('SELECT * FROM "Material" WHERE Name = ? And Typ = ? AND Kategorie = ? AND Raum = ? and MID LIKE ?;', (name,typ,kategorie,raum,mid))
         if self.zeiger.fetchall()!=[]:
             return True
         return False
     
-    def id_data(self,id):
-        self.zeiger.execute('SELECT * FROM "Material" WHERE MID = ?;', (id))
-        return(self.zeiger.fetchall())[0]
+    def getData(self,mid): #Ausgabe eines Datensatzes mittels ID(ID als "String")
+        sql = "SELECT * FROM Material WHERE MID = '"+mid+"';"
+        self.zeiger.execute(sql)
+        return [dsatz for dsatz in self.zeiger]
 
 
 if __name__ == '__main__':
