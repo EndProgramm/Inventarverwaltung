@@ -26,6 +26,10 @@ class Controller:
             # if object exists update object, if not insert it
             pass
 
+    def getObjectByID(self, ID: int) -> dict:
+        return {'ID': ID, 'Name': "null", 'Type': "null", 'Kategorie': "null", 'Ausgeliehen': "null", 'Status': "null",
+                'Anzahl': "null", 'Bemerkung': "null"}
+
     def delObject(self) -> bool:
         pass
 
