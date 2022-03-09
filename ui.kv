@@ -24,7 +24,7 @@
                     root.manager.current = "addUses"
                     root.manager.transition.direction = "right"
             Button:
-                id: "showAll"
+                id: "showButton"
                 text: "Inventar"
                 on_release:
                     root.manager.current = "showAll"
@@ -103,62 +103,70 @@
                     root.saveInv()
 
 <ShowAll>
+    id: showAll
     Table:
-        id: 'table'
-#        Label:
-#            id: "showAllEntry"
-#            text: root.inhalt
-#            text_size: root.width, root.height
 
 <Table>:
-    id: 'main_win'
+    id: table_floor
+    orientation: 'vertical'
+    padding: (5, 5)
+    spacing: 5
+    BoxLayout:
+        size_hint: 1, 0.05
+        orientation: 'horizontal'
+        spacing: 5
+        TextInput:
+            id: suchfeld
+
+            size_hint: 0.3, 1
+            size_hint_max_x: 300
+
+            background_color: (1, 1, 1, 0.8)
+            multiline: False
+            text: 'Suche'
+
+            on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+            on_text_validate:
+                root.callback_suche(self.text)
+        Button:
+            size_hint: 0.1, 1
+            size_hint_max_x: 50
+            on_release:
+                root.callback_suche(suchfeld.text)
+        Button:
+            size_hint: 0.1, 1
+            size_hint_max_x: 50
+            text: "Filter"
+            on_release:
+                root.filter()
 
     BoxLayout:
-        orientation: 'vertical'
-        padding: (5, 5)
-        spacing: 5
-        BoxLayout:
-            size_hint: 1, 0.05
-            orientation: 'horizontal'
-            spacing: 5
-            TextInput:
-                id: suchfeld
-
-                size_hint: 0.3, 1
-                size_hint_max_x: 300
-
-                background_color: (1, 1, 1, 0.8)
-                multiline: False
-                text: 'Suche'
-#                text_language: 'de'
-#                suggestion_text: 'Jep'
-
-                on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                on_text_validate:
-                    root.callback_suche(self.text)
-            Button:
-                size_hint: 0.1, 1
-                size_hint_max_x: 50
-                on_release:
-                    root.callback_suche(suchfeld.text)
-            Button:
-                size_hint: 0.1, 1
-                size_hint_max_x: 50
-                text: "Filter"
-                on_release:
-                    root.filter()
         RecycleView:
             viewclass: 'CustomLabel'
-            id: 'table_floor'
             data: root.table_data
+            id: table_floor
             RecycleGridLayout:
-                id: 'table_floor_layout'
+                id: table_floor_layout
                 cols: root.columns
                 default_size: (None,250)
                 default_size_hint: (1,None)
                 size_hint_y: None
                 height: self.minimum_height
                 spacing: 5
+
+<TableBox>:
+    RecycleView:
+        viewclass: 'CustomLabel'
+        data: root.table_data
+        id: table_floor
+        RecycleGridLayout:
+            id: table_floor_layout
+            cols: root.columns
+            default_size: (None,250)
+            default_size_hint: (1,None)
+            size_hint_y: None
+            height: self.minimum_height
+            spacing: 5
 
 <Popups>
     typ_spinner: typ

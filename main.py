@@ -5,6 +5,7 @@
 Beschreibung: \n
 Basis der UI, implementiert mit UIApp
 """
+import time
 
 from kivy.app import App
 from kivy.uix.widget import Widget
@@ -16,10 +17,12 @@ from kivy.lang.builder import Builder
 from kivy.uix.spinner import Spinner
 from kivy.uix.label import Label
 from kivy.core.window import Window
-from kivy.properties import ObjectProperty, StringProperty
+from kivy.properties import ObjectProperty, StringProperty, NumericProperty, ListProperty
 from kivy.uix.screenmanager import Screen, ScreenManager
 from kivy.uix.recycleview import RecycleView
+from kivy.uix.recyclegridlayout import RecycleGridLayout
 from kivy.uix.boxlayout import BoxLayout
+from kivy.clock import Clock
 from kivy.uix.floatlayout import FloatLayout
 
 from controller.controller import Controller
@@ -41,13 +44,14 @@ class AddConsum(Screen):
 
 class Popups(FloatLayout):
     popup_close = ObjectProperty(None)
-    typ_spinner=ObjectProperty()
-    kategorie_spinner=ObjectProperty()
-    raum_ent=ObjectProperty()
-    zustand_spinner=ObjectProperty()
-    anzahl_von_ent=ObjectProperty()
-    anzahl_bis_ent=ObjectProperty()
+    typ_spinner = ObjectProperty()
+    kategorie_spinner = ObjectProperty()
+    raum_ent = ObjectProperty()
+    zustand_spinner = ObjectProperty()
+    anzahl_von_ent = ObjectProperty()
+    anzahl_bis_ent = ObjectProperty()
     ausleihbar_spinner = ObjectProperty()
+
     def speichern(self):
         dict = {
             "typ": self.typ_spinner.text,
@@ -58,7 +62,6 @@ class Popups(FloatLayout):
             "anzahl_bis": self.anzahl_bis_ent.text,
             "ausleibahrkeit": self.ausleihbar_spinner.text
         }
-        print(dict)
 
 
 class ShowAll(Screen):
@@ -74,26 +77,29 @@ class AddUses(Screen):
         popup.open()
 
 
-class RV(RecycleView):
-    def __init__(self, **kwargs):
-        super(RV, self).__init__(**kwargs)
-
-        abfage = control.getData()
-        self.data = {int(key): {spalte: str(wert) for spalte, wert in enumerate(inhalt)} for key, inhalt in
-                     enumerate(abfage)}
+class TableBox(BoxLayout):
+    def __init__(self, data, columns, **kwargs):
+        self.table_data = data
+        self.columns = columns
+        super().__init__(**kwargs)
 
 
 class Table(BoxLayout):
-    def __init__(self, table='', **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.columns: int = 0
+        self.table_data: list = []
+        self.popupWindow: Popup or None = None
 
-        data = control.getData()
+        self.createTableData(control.getData())
 
+    def createTableData(self, data: dict[str, dict[int, str]]):
         column_titles = [x for x in data.keys()]
         rows_length = len(data[column_titles[0]])
         self.columns = len(column_titles)
 
         self.table_data = []
+
         for y in column_titles:
             self.table_data.append(
                 {'text': str(y), 'size_hint_y': None, 'height': 30, 'bcolor': (1.0, .31, 0.0, 1)})
@@ -102,11 +108,13 @@ class Table(BoxLayout):
                 self.table_data.append(
                     {'text': str(data[y][z]), 'size_hint_y': None, 'height': 20, 'bcolor': (.06, .25, .50, 1)})
 
-        # self.ids.table_floor_layout.cols = self.columns   # define value of cols to the value of self.columns
-        # self.ids.table_floor.data = self.table_data       # add self.table_data to data value
-
-    def callback_suche(self, text):
-        print(text)
+    def callback_suche(self, text: str):
+        self.createTableData(control.getData())
+        self.createTable()
+    
+    def createTable(self):
+        self.clear_widgets(self.children[:1])
+        self.add_widget(TableBox(self.table_data, self.columns))
 
     def filter(self):
         show = Popups(popup_close=self.popup_close)
@@ -117,8 +125,6 @@ class Table(BoxLayout):
 
     def popup_close(self):
         self.popupWindow.dismiss()
-
-
 
 
 class UIApp(App):
