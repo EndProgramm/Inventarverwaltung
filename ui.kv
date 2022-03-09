@@ -102,6 +102,99 @@
                 on_release:
                     root.saveInv()
 
+<Einzelansicht>
+    GridLayout:
+        cols:1
+        bg: (1,1,1,1)
+        spacing: 10
+        padding: 10
+        GridLayout:
+            cols: 2
+            size: root.width, root.height
+            spacing: 10
+            GridLayout:
+                cols: 2
+                padding: 10
+                spacing: 10
+                Label:
+                    text: "ID"
+                    color: 1,0,0,1
+                    canvas.before:
+                        Color:
+                            rgba: 0, 0, 1, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
+                TextInput:
+                    multiline: False
+                Label:
+                    text: "Name"
+                TextInput:
+                    multiline: False
+                Label:
+                    text: "Raum"
+                TextInput:
+                    multiline: False
+                Label:
+                    text: "Ausgeliehen"
+                TextInput:
+                    multiline: False
+            GridLayout:
+                cols: 2
+                padding: 10
+                spacing: 10
+                Label:
+                    text: "Art"
+                TextInput:
+                    multiline: False
+                Label:
+                    text: "Typ"
+                TextInput:
+                    multiline: False
+                Label:
+                    text: "Anzahl"
+                TextInput:
+                    multiline: False
+                Label:
+                    text: "Status"
+                TextInput:
+                    multiline: False
+        Label:
+            text: "Bemerkung"
+            text_size:self.size
+            halign:'left'
+            valign:'middle'
+            size_hint: (1.0,0.125)
+            spacing: 10
+
+        TextInput:
+            multiline: True
+            size_hint: (1.0,0.25)
+
+        GridLayout:
+            cols: 3
+            size_hint: (1.0,0.25)
+            Button:
+                id: "showAll"
+                text: "Abbrechen"
+                on_release:
+                    root.manager.current = "showAll"
+                    root.manager.transition.direction = "up"
+
+            Button:
+                id: "showAll"
+                text: "Defekt melden"
+                on_release:
+                    root.manager.current = None
+                    root.manager.transition.direction = "up"
+
+            Button:
+                id: "showAll"
+                text: "Speichern"
+                on_release:
+                    root.manager.current = None
+                    root.manager.transition.direction = "up"
+
 <ShowAll>
     Table:
         id: 'table'
@@ -236,11 +329,27 @@
                 root.speichern()
             multiline: False
 
-<CustomLabel@Label>:
+<CustomLabel@Button>:
     bcolor: (1, 1, 1, 1)
+    background_color: 1, .3, .4, .85
+    bg: 1,1,1,1
+    bg2: 0,0,0,0
     canvas.before:
         Color:
-            rgba: root.bcolor
+            rgba: root.bg
         Rectangle:
             size: self.size
             pos: self.pos
+    canvas:
+        Color:
+            rgba: root.bg2
+    id: "einzelansicht"
+
+    on_release:
+        print(self.text)
+        print(self.y) # y Position einer Reihe, wichtig für Verbesserung später
+
+        kat = ("ID", "Name", "Typ", "Kategorie", "Raum", "Ausgeliehen", "Status", "Anzahl", "Bemerkung")
+        if self.text in kat: print("sortieren")
+        else: app.sManage.current = "einzelansicht"
+        app.sManage.transition.direction = "down"

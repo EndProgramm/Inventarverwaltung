@@ -2,7 +2,7 @@ import sqlite3
 
 class Model():
     def __init__(self):
-        self.verbindung = sqlite3.connect("inventar.db")
+        self.verbindung = sqlite3.connect("model/inventar.db")
         self.zeiger = self.verbindung.cursor()
 
     def getInventory(self):
