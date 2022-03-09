@@ -37,7 +37,14 @@ class Controller:
 
     def getKategorie(self):
         return [i[0] for i in self.model.getKategorien()]
-
+    
+    def filterSpeichern(self,filterr):
+        for i in filterr:
+            if filterr[i]=="kein Filter" or filterr[i]=="":
+                self.filter[i]="%"
+            else:
+                self.filter[i]=filterr[i]
+        return self.getData()
 
 if __name__ == '__main__':
     # Für tests des Controllers (Achtung greift natürlich trotzdem auf die anderen Teile zu!)
