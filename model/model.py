@@ -71,7 +71,7 @@ class Model():
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def id_data(self,id):  #Gibt Datensatz mit gewählter ID aus, falls nicht vorhanden None
+    def idData(self,id):  #Gibt Datensatz mit gewählter ID aus, falls nicht vorhanden None
         self.zeiger.execute('SELECT * FROM "Material" WHERE MID = ?', [id])
         fetched_data = self.zeiger.fetchall()
         if fetched_data == []:
