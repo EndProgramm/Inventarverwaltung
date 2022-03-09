@@ -2,7 +2,7 @@ import sqlite3
 
 class Model():
     def __init__(self):
-        self.verbindung = sqlite3.connect("inventar.db")
+        self.verbindung = sqlite3.connect("model/inventar.db")
         self.zeiger = self.verbindung.cursor()
 
     def getInventory(self): #Ausgabe aller Datensätze
@@ -71,7 +71,7 @@ class Model():
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def id_data(self,id):  #Gibt Datensatz mit gewählter ID aus, falls nicht vorhanden None
+    def idData(self,id):  #Gibt Datensatz mit gewählter ID aus, falls nicht vorhanden None
         self.zeiger.execute('SELECT * FROM "Material" WHERE MID = ?', [id])
         fetched_data = self.zeiger.fetchall()
         if fetched_data == []:

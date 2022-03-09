@@ -31,7 +31,10 @@ control = Controller()
 
 
 class AddInv(Screen):
-    pass
+    addUses = ObjectProperty()
+    addConsum = ObjectProperty()
+    showAll = ObjectProperty()
+    einzelansicht = ObjectProperty()
 
 
 class AddConsum(Screen):
@@ -67,6 +70,8 @@ class Popups(FloatLayout):
 class ShowAll(Screen):
     pass
 
+class Einzelansicht(Screen):
+    pass
 
 class AddUses(Screen):
     def saveInv(self):
@@ -134,13 +139,14 @@ class UIApp(App):
 
     def build(self):
         Window.size = (800, 600)
-        sManage = ScreenManager()
-        sManage.add_widget(AddInv(name='addInv'))
-        sManage.add_widget(AddConsum(name='addConsum'))
-        sManage.add_widget(AddUses(name='addUses'))
-        sManage.add_widget(ShowAll(name='showAll'))
-        sManage.current = 'showAll'
-        return sManage
+        self.sManage = ScreenManager()
+        self.sManage.add_widget(AddInv(name='addInv'))
+        self.sManage.add_widget(AddConsum(name='addConsum'))
+        self.sManage.add_widget(AddUses(name='addUses'))
+        self.sManage.add_widget(ShowAll(name='showAll'))
+        self.sManage.add_widget(Einzelansicht(name='einzelansicht'))
+        self.sManage.current = 'showAll'
+        return self.sManage
 
 
 if __name__ == '__main__':
