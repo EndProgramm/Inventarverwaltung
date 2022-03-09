@@ -8,9 +8,10 @@ from model.model import Model
 class Controller:
     def __init__(self):
         self.model = Model()
-        self.filter={'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%', 'ausleibahrkeit': '%'}
-        self.such=""
-        
+        self.filter = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
+                       'ausleibahrkeit': '%'}
+        self.such = ""
+
     def getData(self) -> dict[dict]:
         abfrage = self.model.getInventory()
         erg = [[spalte] for spalte in
@@ -46,18 +47,19 @@ class Controller:
 
     def getKategorie(self):
         return [i[0] for i in self.model.getKategorien()]
-    
-    def filterSpeichern(self,filterr):
+
+    def filterSpeichern(self, filterr):
         for i in filterr:
-            if filterr[i]=="kein Filter" or filterr[i]=="":
-                self.filter[i]="%"
+            if filterr[i] == "kein Filter" or filterr[i] == "":
+                self.filter[i] = "%"
             else:
-                self.filter[i]=filterr[i]
+                self.filter[i] = filterr[i]
         return self.getData()
-    
-    def suche(self,suchbegriff):
-        self.such="%"+str(suchbegriff)+"%"
+
+    def suche(self, suchbegriff):
+        self.such = "%" + str(suchbegriff) + "%"
         return self.getData()
+
 
 if __name__ == '__main__':
     # Für tests des Controllers (Achtung greift natürlich trotzdem auf die anderen Teile zu!)
