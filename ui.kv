@@ -238,6 +238,12 @@
             text: "GG hinzufügen"
             on_release:
                 root.add_GG()
+        Button:
+            size_hint: 0.1, 1
+            size_hint_max_x: 100
+            text: "VG hinzufügen"
+            on_release:
+                root.add_VG()
 
     BoxLayout:
         RecycleView:
@@ -400,6 +406,67 @@
             size_hint: 1, 0.1
             on_release:
                 root.popup_add_GG_close()
+                root.speichern()
+            multiline: False
+
+<Popup_add_VG>
+    name_ent: name
+    kategorie_ent: kategorie
+    raum_ent: raum
+    anzahl_ent: anzahl
+    zustand_spinner: zustand
+    bemerkung_ent:bemerkung
+    GridLayout:
+        cols: 1
+        size: root.width, root.height
+        pos: root.pos
+        GridLayout:
+            cols: 2
+            padding: 10
+            spacing: 10
+            Label:
+                text:"Name:"
+            TextInput:
+                id: name
+                multiline: False
+            Label:
+                text: "Kategorie:"
+            TextInput:
+                id: kategorie
+                multiline: False
+            Label:
+                text: "Raum:"
+            TextInput:
+                id: raum
+                multiline: False
+            Label:
+                text: "Zustand:"
+            Spinner:
+                id: zustand
+                text: "funktionsfähig"
+                values: "funktionsfähig", "defekt"
+            Label:
+                text: "Anzahl"
+            TextInput:
+                id: anzahl
+                multiline: False
+            Label:
+                text: "Bemerkungen:"
+            TextInput:
+                id: bemerkung
+                multiline: False
+
+
+        Button:
+            text: "zurück"
+            size_hint: 1, 0.1
+            on_release:
+                root.popup_add_VG_close()
+        Button:
+            text: "speichern"
+            size_hint: 1, 0.1
+            on_release:
+                root.popup_add_VG_close()
                 root.speichern()
             multiline: False
 

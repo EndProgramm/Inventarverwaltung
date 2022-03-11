@@ -83,7 +83,27 @@ class Popup_add_GG(FloatLayout): #Gebrauchsgegenstand
             "typ": "Gg",
             "kategorie": self.kategorie_ent.text,
             "raum": self.raum_ent.text,
-            "ausleibahrkeit": self.ausleihbar_checkbox.active, #Wert zurückbekommen (sowas wie self.kategorie.text)
+            "ausleibahrkeit": self.ausleihbar_checkbox.active,
+            "zustand": self.zustand_spinner.text,
+            "Bemerkung": self.bemerkung_ent.text
+        }
+        print(dict)
+
+class Popup_add_VG(FloatLayout): #Verbrauchsgegenstand
+    popup_add_VG_close = ObjectProperty(None)
+    name_ent=ObjectProperty()
+    kategorie_ent=ObjectProperty()
+    raum_ent=ObjectProperty()
+    zustand_spinner=ObjectProperty()
+    bemerkung_ent=ObjectProperty()
+    anzahl_ent = ObjectProperty()
+    def speichern(self):
+        dict = {
+            "name": self.name_ent.text,
+            "typ": "Gg",
+            "kategorie": self.kategorie_ent.text,
+            "raum": self.raum_ent.text,
+            "anzahl": self.anzahl_ent.text,
             "zustand": self.zustand_spinner.text,
             "Bemerkung": self.bemerkung_ent.text
         }
@@ -158,11 +178,23 @@ class Table(BoxLayout):
                                  size_hint=(None, None), size=(300, 400))
         self.popupWindow_add_GG.open()
 
-    def popup_add_GG_close(self):
-        self.popupWindow_add_GG.dismiss()
+    def add_VG(self):
+        show = Popup_add_VG(popup_add_VG_close=self.popup_add_VG_close)
+        self.popupWindow_add_VG = Popup(title="Verbrauchsgegenstand hinzufügen", title_align="center",
+                                        content=show, auto_dismiss=True,
+                                        size_hint=(None, None), size=(300, 400))
+        self.popupWindow_add_VG.open()
 
     def popup_close(self):
         self.popupWindow.dismiss()
+
+    def popup_add_GG_close(self):
+        self.popupWindow_add_GG.dismiss()
+
+    def popup_add_VG_close(self):
+        self.popupWindow_add_VG.dismiss()
+
+
 
 
 class UIApp(App):
