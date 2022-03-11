@@ -22,7 +22,7 @@ class Controller:
         return {zeile[0] if len(zeile) > 0 else print(len(zeile)): {i: spalte for i, spalte in enumerate(zeile[1:])} for
                 zeile in erg}
 
-    def saveObejct(self, newObject: dict) -> bool:
+    def saveObject(self, newObject: dict) -> bool:
         if newObject.get("Name") is None or newObject.get("Typ") is None or newObject.get("Kategorie") is None or \
                 newObject.get("Raum") is None or newObject.get("Anzahl"):
             raise Exception('Missing arguments')

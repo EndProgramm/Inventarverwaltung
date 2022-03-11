@@ -98,7 +98,7 @@ class Einzelansicht(Screen):
 
 class AddUses(Screen):
     def saveInv(self):
-        if control.saveObejct():  # Hier ist der Callback
+        if control.saveObject():  # Hier ist der Callback
             popup = Popup(title='Gespeichert',
                           content=Label(text="Neues Gebrauchsmaterial\nwurde gespeichert!"),
                           size_hint=(None, None), size=(200, 100))
