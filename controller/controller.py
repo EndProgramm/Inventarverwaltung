@@ -22,13 +22,28 @@ class Controller:
         return {zeile[0] if len(zeile) > 0 else print(len(zeile)): {i: spalte for i, spalte in enumerate(zeile[1:])} for
                 zeile in erg}
 
-    def saveObejct(self, newObject: []) -> bool:
-        if len(newObject) < 8:  # Number is not correct - Just a test value
+    def saveObejct(self, newObject: dict) -> bool:
+        if newObject.get("Name") is None or newObject.get("Typ") is None or newObject.get("Kategorie") is None or \
+                newObject.get("Raum") is None or newObject.get("Anzahl"):
             raise Exception('Missing arguments')
         else:
-            # run model
-            # if object exists update object, if not insert it
-            pass
+            if newObject.get("ID") is not None:
+                self.model.updateInventory(newObject.get("ID"), newObject.get("Name"), newObject.get("Typ"),
+                                           newObject.get("Kategorie"), newObject.get("Raum"),
+                                           newObject.get("Ausgeliehen"), newObject.get("Status"),
+                                           newObject.get("Anzahl"), newObject.get("Bemerkung"))
+                return True
+            else:
+                return self.existsObject(self.model.addInventory(newObject.get("Name"), newObject.get("Typ"),
+                                                                 newObject.get("Kategorie"), newObject.get("Raum"),
+                                                                 newObject.get("Ausgeliehen"), newObject.get("Status"),
+                                                                 newObject.get("Anzahl"), newObject.get("Bemerkung")))
+
+    def existsObject(self, ID: int) -> bool:
+        if self.model.getData(ID):
+            return False
+        else:
+            return True
 
     def getObjectByID(self, ID: int) -> dict:
         material = self.model.getData(ID)
@@ -43,7 +58,7 @@ class Controller:
 
     def delObject(self, ID: int) -> bool:
         self.model.deleteInventory(ID)
-        pass
+        return self.existsObject(ID)
 
     def getKategorie(self):
         return [i[0] for i in self.model.getKategorien()]
@@ -56,8 +71,8 @@ class Controller:
                 self.filter[i] = filterr[i]
         return self.getData()
 
-    def suche(self, suchbegriff):
-        self.such = "%" + str(suchbegriff) + "%"
+    def suche(self, suchbegriff: str) -> dict[dict]:
+        self.such = "%" + suchbegriff + "%"
         return self.getData()
 
 
