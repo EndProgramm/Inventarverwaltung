@@ -80,7 +80,7 @@ class Popup_add_GG(FloatLayout): #Gebrauchsgegenstand
     def speichern(self):
         dict = {
             "name": self.name_ent.text,
-            "typ": "Gg",
+            "typ": "Vg",
             "kategorie": self.kategorie_ent.text,
             "raum": self.raum_ent.text,
             "ausleibahrkeit": self.ausleihbar_checkbox.active,
