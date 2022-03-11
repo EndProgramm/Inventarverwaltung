@@ -55,6 +55,9 @@ class Popups(FloatLayout):
     anzahl_bis_ent = ObjectProperty()
     ausleihbar_spinner = ObjectProperty()
 
+    def kategorie(self):
+        return control.getKategorie()
+
     def speichern(self):
         dict = {
             "typ": self.typ_spinner.text,
@@ -65,6 +68,26 @@ class Popups(FloatLayout):
             "anzahl_bis": self.anzahl_bis_ent.text,
             "ausleibahrkeit": self.ausleihbar_spinner.text
         }
+
+class Popup_add_GG(FloatLayout): #Gebrauchsgegenstand
+    popup_add_GG_close = ObjectProperty(None)
+    name_ent=ObjectProperty()
+    kategorie_ent=ObjectProperty()
+    raum_ent=ObjectProperty()
+    zustand_spinner=ObjectProperty()
+    bemerkung_ent=ObjectProperty()
+    ausleihbar_checkbox = ObjectProperty()
+    def speichern(self):
+        dict = {
+            "name": self.name_ent.text,
+            "typ": "Gg",
+            "kategorie": self.kategorie_ent.text,
+            "raum": self.raum_ent.text,
+            "ausleibahrkeit": self.ausleihbar_checkbox.active, #Wert zurückbekommen (sowas wie self.kategorie.text)
+            "zustand": self.zustand_spinner.text,
+            "Bemerkung": self.bemerkung_ent.text
+        }
+        print(dict)
 
 
 class ShowAll(Screen):
@@ -116,7 +139,7 @@ class Table(BoxLayout):
     def callback_suche(self, text: str):
         self.createTableData(control.getData())
         self.createTable()
-    
+
     def createTable(self):
         self.clear_widgets(self.children[:1])
         self.add_widget(TableBox(self.table_data, self.columns))
@@ -127,6 +150,16 @@ class Table(BoxLayout):
                                  content=show, auto_dismiss=True,
                                  size_hint=(None, None), size=(300, 400))
         self.popupWindow.open()
+
+    def add_GG(self):
+        show = Popup_add_GG(popup_add_GG_close=self.popup_add_GG_close)
+        self.popupWindow_add_GG = Popup(title="Gebrauchsgegenstand hinzufügen", title_align="center",
+                                 content=show, auto_dismiss=True,
+                                 size_hint=(None, None), size=(300, 400))
+        self.popupWindow_add_GG.open()
+
+    def popup_add_GG_close(self):
+        self.popupWindow_add_GG.dismiss()
 
     def popup_close(self):
         self.popupWindow.dismiss()
