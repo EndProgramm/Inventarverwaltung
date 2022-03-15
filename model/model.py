@@ -42,7 +42,7 @@ class Model():
     
     def sortInventory(self, search, direction, sortcolumn = "MID", filtercolumn = None): #Sortieren, welches Suche und Filterung berücksichtigt
         sql = "SELECT * from Material"
-        if filtercolumn != None:
+        if filtercolumn != None:t
             sql += " WHERE {}".format(filtercolumn)
         else:
             sql += " WHERE Name OR Bemerkung"
@@ -67,7 +67,7 @@ class Model():
         return False
     
     def getData(self,mid): #Ausgabe eines Datensatzes mittels ID(ID als "String")
-        sql = "SELECT * FROM Material WHERE MID = '"+mid+"';"
+        sql = "SELECT * FROM Material WHERE MID = '"+str(mid)+"';"
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     

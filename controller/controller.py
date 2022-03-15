@@ -10,12 +10,14 @@ class Controller:
         self.filter = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
                        'ausleibahrkeit': '%'}
         self.such = ""
-        self.sortierung="ID"
-        self.direction="asc"
+        self.sortierung = "ID"
+        self.direction = "asc"
         print(self.filter["ausleibahrkeit"])
 
-    def getData(self) :# dict[dict]:
-        abfrage = self.model.filterAll(self.such,self.filter["typ"],self.filter["kategorie"],self.filter["raum"],self.filter["ausleibahrkeit"],self.filter["zustand"],self.filter['anzahl_von'],self.filter['anzahl_bis'],self.sortierung,self.direction)
+    def getData(self) -> dict[dict]:
+        abfrage = self.model.filterAll(self.such, self.filter["typ"], self.filter["kategorie"], self.filter["raum"],
+                                       self.filter["ausleibahrkeit"], self.filter["zustand"], self.filter['anzahl_von'],
+                                       self.filter['anzahl_bis'], self.sortierung, self.direction)
         erg = [[spalte] for spalte in
                ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Status', 'Anzahl', 'Bemerkung']]
         for liste in abfrage:
@@ -30,7 +32,7 @@ class Controller:
             raise Exception('Missing arguments')
         else:
             if newObject.get("ID") is not None:
-                self.model.updateInventory(newObject.get("ID"), newObject.get("name"), newObject.get("typ"),
+                self.model.updateInventory(str(newObject.get("ID")), newObject.get("name"), newObject.get("typ"),
                                            newObject.get("kategorie"), newObject.get("raum"),
                                            newObject.get("ausgeliehen"), newObject.get("status"),
                                            newObject.get("anzahl"), newObject.get("bemerkung"))
@@ -65,7 +67,8 @@ class Controller:
         return [i[0] for i in self.model.getKategorien()]
 
     def filterSpeichern(self, filterr: dict[str, str]) -> dict[str, any]:
-        stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg", "funktionsfähig": "True", "defekt": "False"}
+        stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg", "funktionsfähig": "True",
+                     "defekt": "False"}
         for i in filterr:
             if filterr[i] in stehtfuer:
                 self.filter[i] = stehtfuer[filterr[i]]
