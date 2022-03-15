@@ -7,13 +7,17 @@ from model.model import Model
 class Controller:
     def __init__(self):
         self.model = Model()
-
         self.filter = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
                        'ausleibahrkeit': '%'}
         self.such = ""
+        self.sortierung = "ID"
+        self.direction = "asc"
+        print(self.filter["ausleibahrkeit"])
 
-    def getData(self) -> dict[str, dict[int, str]]:
-        abfrage = self.model.getInventory()
+    def getData(self) -> dict[dict]:
+        abfrage = self.model.filterAll(self.such, self.filter["typ"], self.filter["kategorie"], self.filter["raum"],
+                                       self.filter["ausleibahrkeit"], self.filter["zustand"], self.filter['anzahl_von'],
+                                       self.filter['anzahl_bis'], self.sortierung, self.direction)
         erg = [[spalte] for spalte in
                ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Status', 'Anzahl', 'Bemerkung']]
         for liste in abfrage:
@@ -28,7 +32,7 @@ class Controller:
             raise Exception('Missing arguments')
         else:
             if newObject.get("ID") is not None:
-                self.model.updateInventory(newObject.get("ID"), newObject.get("name"), newObject.get("typ"),
+                self.model.updateInventory(str(newObject.get("ID")), newObject.get("name"), newObject.get("typ"),
                                            newObject.get("kategorie"), newObject.get("raum"),
                                            newObject.get("ausgeliehen"), newObject.get("status"),
                                            newObject.get("anzahl"), newObject.get("bemerkung"))
@@ -62,8 +66,20 @@ class Controller:
     def getKategorie(self):
         return [i[0] for i in self.model.getKategorien()]
 
-    def filterSpeichern(self, filterr: dict[str, str]) -> dict[str, any]:
-        stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg"}
+    def sortBy(self, sortierung: str) -> dict[dict]:
+        if self.sortierung == sortierung:
+            if self.direction == "ASC":
+                self.direction = "DESC"
+            else:
+                self.direction = "ASC"
+        else:
+            self.sortierung = sortierung
+            self.direction = "ASC"
+        return self.getData()
+
+    def filterSpeichern(self, filterr: dict[str, str]) -> dict[dict]:
+        stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg", "funktionsfähig": "True",
+                     "defekt": "False"}
         for i in filterr:
             if filterr[i] in stehtfuer:
                 self.filter[i] = stehtfuer[filterr[i]]
@@ -74,6 +90,16 @@ class Controller:
     def suche(self, suchbegriff: str) -> dict[dict]:
         self.such = "%" + suchbegriff + "%"
         return self.getData()
+    
+    def getfilter(self):
+        stehtfuerrueckwarts={"%":"kein Filter","Gg":"Gebrauch","Vg":"Verbrauch","True":"funktionsfähig","False":"defekt"}
+        filterr = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
+                       'ausleibahrkeit': '%'}
+        for i in self.filter:
+            if self.filter[i] in stehtfuerrueckwarts:
+                filterr[i]=stehtfuerrueckwarts[self.filter[i]]
+            else:
+                filterr[i]=self.filter[i]
 
 
 if __name__ == '__main__':
