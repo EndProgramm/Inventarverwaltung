@@ -69,14 +69,16 @@ class Popups(FloatLayout):
             "ausleibahrkeit": self.ausleihbar_spinner.text
         }
 
-class Popup_add_GG(FloatLayout): #Gebrauchsgegenstand
+
+class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand
     popup_add_GG_close = ObjectProperty(None)
-    name_ent=ObjectProperty()
-    kategorie_ent=ObjectProperty()
-    raum_ent=ObjectProperty()
-    zustand_spinner=ObjectProperty()
-    bemerkung_ent=ObjectProperty()
+    name_ent = ObjectProperty()
+    kategorie_ent = ObjectProperty()
+    raum_ent = ObjectProperty()
+    zustand_spinner = ObjectProperty()
+    bemerkung_ent = ObjectProperty()
     ausleihbar_checkbox = ObjectProperty()
+
     def speichern(self):
         dict = {
             "name": self.name_ent.text,
@@ -89,14 +91,16 @@ class Popup_add_GG(FloatLayout): #Gebrauchsgegenstand
         }
         print(dict)
 
-class Popup_add_VG(FloatLayout): #Verbrauchsgegenstand
+
+class PopupAddVG(FloatLayout):  # Verbrauchsgegenstand
     popup_add_VG_close = ObjectProperty(None)
-    name_ent=ObjectProperty()
-    kategorie_ent=ObjectProperty()
-    raum_ent=ObjectProperty()
-    zustand_spinner=ObjectProperty()
-    bemerkung_ent=ObjectProperty()
+    name_ent = ObjectProperty()
+    kategorie_ent = ObjectProperty()
+    raum_ent = ObjectProperty()
+    zustand_spinner = ObjectProperty()
+    bemerkung_ent = ObjectProperty()
     anzahl_ent = ObjectProperty()
+
     def speichern(self):
         dict = {
             "name": self.name_ent.text,
@@ -113,8 +117,10 @@ class Popup_add_VG(FloatLayout): #Verbrauchsgegenstand
 class ShowAll(Screen):
     pass
 
+
 class Einzelansicht(Screen):
     pass
+
 
 class AddUses(Screen):
     def saveInv(self):
@@ -157,7 +163,10 @@ class Table(BoxLayout):
                     {'text': str(data[y][z]), 'size_hint_y': None, 'height': 20, 'bcolor': (.06, .25, .50, 1)})
 
     def callback_suche(self, text: str):
-        self.createTableData(control.getData())
+        self.refreshTable(control.suche(text))
+
+    def refreshTable(self, table_data: dict[str, dict[int, str]]):
+        self.createTableData(table_data)
         self.createTable()
 
     def createTable(self):
@@ -172,14 +181,14 @@ class Table(BoxLayout):
         self.popupWindow.open()
 
     def add_GG(self):
-        show = Popup_add_GG(popup_add_GG_close=self.popup_add_GG_close)
+        show = PopupAddGG(popup_add_GG_close=self.popup_add_GG_close)
         self.popupWindow_add_GG = Popup(title="Gebrauchsgegenstand hinzufügen", title_align="center",
-                                 content=show, auto_dismiss=True,
-                                 size_hint=(None, None), size=(300, 400))
+                                        content=show, auto_dismiss=True,
+                                        size_hint=(None, None), size=(300, 400))
         self.popupWindow_add_GG.open()
 
     def add_VG(self):
-        show = Popup_add_VG(popup_add_VG_close=self.popup_add_VG_close)
+        show = PopupAddVG(popup_add_VG_close=self.popup_add_VG_close)
         self.popupWindow_add_VG = Popup(title="Verbrauchsgegenstand hinzufügen", title_align="center",
                                         content=show, auto_dismiss=True,
                                         size_hint=(None, None), size=(300, 400))
@@ -193,8 +202,6 @@ class Table(BoxLayout):
 
     def popup_add_VG_close(self):
         self.popupWindow_add_VG.dismiss()
-
-
 
 
 class UIApp(App):
