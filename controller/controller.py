@@ -46,15 +46,14 @@ class Controller:
             return True
 
     def getObjectByID(self, ID: int) -> dict:
-        material = self.model.getData(ID)
+        material = self.model.getData(str(ID))
         if material:
-            return {'ID': ID, 'Name': material[0][1], 'Type': material[0][2], 'Kategorie': material[0][3],
-                    'Ausgeliehen': material[0][4], 'Status': material[0][5],
-                    'Anzahl': material[0][6], 'Bemerkung': material[0][7]}
+            return {'ID': ID, 'name': material[0][1], 'type': material[0][2], 'kategorie': material[0][3],
+                    'raum': material[0][4], 'ausgeliehen': material[0][5], 'status': material[0][6],
+                    'anzahl': material[0][7], 'Bemerkung': material[0][8]}
         else:
-            return {'ID': ID, 'Name': "null", 'Type': "null", 'Kategorie': "null", 'Ausgeliehen': "null",
-                    'Status': "null",
-                    'Anzahl': "null", 'Bemerkung': "null"}
+            return {'ID': ID, 'name': "null", 'type': "null", 'kategorie': "null", 'raum': 'null',
+                    'ausgeliehen': "null", 'status': "null", 'anzahl': "null", 'bemerkung': "null"}
 
     def delObject(self, ID: int) -> bool:
         self.model.deleteInventory(ID)
