@@ -7,13 +7,15 @@ from model.model import Model
 class Controller:
     def __init__(self):
         self.model = Model()
-
         self.filter = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
                        'ausleibahrkeit': '%'}
         self.such = ""
+        self.sortierung="ID"
+        self.direction="asc"
+        print(self.filter["ausleibahrkeit"])
 
-    def getData(self) -> dict[str, dict[int, str]]:
-        abfrage = self.model.getInventory()
+    def getData(self) :# dict[dict]:
+        abfrage = self.model.filterAll(self.such,self.filter["typ"],self.filter["kategorie"],self.filter["raum"],self.filter["ausleibahrkeit"],self.filter["zustand"],self.filter['anzahl_von'],self.filter['anzahl_bis'],self.sortierung,self.direction)
         erg = [[spalte] for spalte in
                ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Status', 'Anzahl', 'Bemerkung']]
         for liste in abfrage:
