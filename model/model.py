@@ -67,7 +67,7 @@ class Model():
         return False
     
     def getData(self,mid): #Ausgabe eines Datensatzes mittels ID(ID als "String")
-        sql = "SELECT * FROM Material WHERE MID = '"+mid+"';"
+        sql = "SELECT * FROM Material WHERE MID = '"+str(mid)+"';"
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     

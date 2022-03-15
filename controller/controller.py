@@ -66,7 +66,18 @@ class Controller:
     def getKategorie(self):
         return [i[0] for i in self.model.getKategorien()]
 
-    def filterSpeichern(self, filterr: dict[str, str]) -> dict[str, any]:
+    def sortBy(self, sortierung: str) -> dict[dict]:
+        if self.sortierung == sortierung:
+            if self.direction == "ASC":
+                self.direction = "DESC"
+            else:
+                self.direction = "ASC"
+        else:
+            self.sortierung = sortierung
+            self.direction = "ASC"
+        return self.getData()
+
+    def filterSpeichern(self, filterr: dict[str, str]) -> dict[dict]:
         stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg", "funktionsfähig": "True",
                      "defekt": "False"}
         for i in filterr:
@@ -79,6 +90,16 @@ class Controller:
     def suche(self, suchbegriff: str) -> dict[dict]:
         self.such = "%" + suchbegriff + "%"
         return self.getData()
+    
+    def getfilter(self):
+        stehtfuerrueckwarts={"%":"kein Filter","Gg":"Gebrauch","Vg":"Verbrauch","True":"funktionsfähig","False":"defekt"}
+        filterr = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
+                       'ausleibahrkeit': '%'}
+        for i in self.filter:
+            if self.filter[i] in stehtfuerrueckwarts:
+                filterr[i]=stehtfuerrueckwarts[self.filter[i]]
+            else:
+                filterr[i]=self.filter[i]
 
 
 if __name__ == '__main__':
