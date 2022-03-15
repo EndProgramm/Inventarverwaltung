@@ -65,7 +65,7 @@ class Controller:
         return [i[0] for i in self.model.getKategorien()]
 
     def filterSpeichern(self, filterr: dict[str, str]) -> dict[str, any]:
-        stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg"}
+        stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg", "funktionsfähig": "True", "defekt": "False"}
         for i in filterr:
             if filterr[i] in stehtfuer:
                 self.filter[i] = stehtfuer[filterr[i]]
