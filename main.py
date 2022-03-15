@@ -55,6 +55,9 @@ class Popups(FloatLayout):
     anzahl_bis_ent = ObjectProperty()
     ausleihbar_spinner = ObjectProperty()
 
+    def kategorie(self):
+        return control.getKategorie()
+
     def speichern(self):
         dict = {
             "typ": self.typ_spinner.text,
@@ -66,6 +69,46 @@ class Popups(FloatLayout):
             "ausleibahrkeit": self.ausleihbar_spinner.text
         }
 
+class Popup_add_GG(FloatLayout): #Gebrauchsgegenstand
+    popup_add_GG_close = ObjectProperty(None)
+    name_ent=ObjectProperty()
+    kategorie_ent=ObjectProperty()
+    raum_ent=ObjectProperty()
+    zustand_spinner=ObjectProperty()
+    bemerkung_ent=ObjectProperty()
+    ausleihbar_checkbox = ObjectProperty()
+    def speichern(self):
+        dict = {
+            "name": self.name_ent.text,
+            "typ": "Gg",
+            "kategorie": self.kategorie_ent.text,
+            "raum": self.raum_ent.text,
+            "ausleibahrkeit": self.ausleihbar_checkbox.active,
+            "zustand": self.zustand_spinner.text,
+            "bemerkung": self.bemerkung_ent.text
+        }
+        print(dict)
+
+class Popup_add_VG(FloatLayout): #Verbrauchsgegenstand
+    popup_add_VG_close = ObjectProperty(None)
+    name_ent=ObjectProperty()
+    kategorie_ent=ObjectProperty()
+    raum_ent=ObjectProperty()
+    zustand_spinner=ObjectProperty()
+    bemerkung_ent=ObjectProperty()
+    anzahl_ent = ObjectProperty()
+    def speichern(self):
+        dict = {
+            "name": self.name_ent.text,
+            "typ": "Vg",
+            "kategorie": self.kategorie_ent.text,
+            "raum": self.raum_ent.text,
+            "anzahl": self.anzahl_ent.text,
+            "zustand": self.zustand_spinner.text,
+            "bemerkung": self.bemerkung_ent.text
+        }
+        print(dict)
+
 
 class ShowAll(Screen):
     pass
@@ -75,7 +118,7 @@ class Einzelansicht(Screen):
 
 class AddUses(Screen):
     def saveInv(self):
-        if control.saveObejct():  # Hier ist der Callback
+        if control.saveObject():  # Hier ist der Callback
             popup = Popup(title='Gespeichert',
                           content=Label(text="Neues Gebrauchsmaterial\nwurde gespeichert!"),
                           size_hint=(None, None), size=(200, 100))
@@ -116,7 +159,7 @@ class Table(BoxLayout):
     def callback_suche(self, text: str):
         self.createTableData(control.getData())
         self.createTable()
-    
+
     def createTable(self):
         self.clear_widgets(self.children[:1])
         self.add_widget(TableBox(self.table_data, self.columns))
@@ -128,8 +171,30 @@ class Table(BoxLayout):
                                  size_hint=(None, None), size=(300, 400))
         self.popupWindow.open()
 
+    def add_GG(self):
+        show = Popup_add_GG(popup_add_GG_close=self.popup_add_GG_close)
+        self.popupWindow_add_GG = Popup(title="Gebrauchsgegenstand hinzufügen", title_align="center",
+                                 content=show, auto_dismiss=True,
+                                 size_hint=(None, None), size=(300, 400))
+        self.popupWindow_add_GG.open()
+
+    def add_VG(self):
+        show = Popup_add_VG(popup_add_VG_close=self.popup_add_VG_close)
+        self.popupWindow_add_VG = Popup(title="Verbrauchsgegenstand hinzufügen", title_align="center",
+                                        content=show, auto_dismiss=True,
+                                        size_hint=(None, None), size=(300, 400))
+        self.popupWindow_add_VG.open()
+
     def popup_close(self):
         self.popupWindow.dismiss()
+
+    def popup_add_GG_close(self):
+        self.popupWindow_add_GG.dismiss()
+
+    def popup_add_VG_close(self):
+        self.popupWindow_add_VG.dismiss()
+
+
 
 
 class UIApp(App):
