@@ -28,6 +28,7 @@ from kivy.uix.floatlayout import FloatLayout
 from controller.controller import Controller
 
 control = Controller()
+id: int = 0
 
 
 class AddInv(Screen):
@@ -124,41 +125,67 @@ class ShowAll(Screen):
 
 
 class Einzelansicht(Screen):
-    pass
+    def __init__(self, **kwargs):
+        self.texte: dict[str, any] = {'None': None}
+        super().__init__(**kwargs)
+
+    def entryFill(self):
+        global id
+        self.texte = control.getObjectByID(int(id))
+        self.ids.entry_id.text = str(self.texte.get("ID", "None"))
+        self.ids.entry_name.text = str(self.texte.get("name", "None"))
+        self.ids.entry_raum.text = str(self.texte.get("raum", "None"))
+        self.ids.entry_typ.text = str(self.texte.get("type", "None"))
+        self.ids.entry_art.text = str(self.texte.get("kategorie", "None"))
+        self.ids.entry_ausgeliehen.text = str(self.texte.get("ausgeliehen", "None"))
+        self.ids.entry_status.text = str(self.texte.get("status", "None"))
+        self.ids.entry_anzahl.text = str(self.texte.get("anzahl", "None"))
+        self.ids.entry_bemerkung.text = str(self.texte.get("bemerkung", "None"))
+
+    def speichern(self):
+        dataNew = {'ID': int(self.ids.entry_id.text),
+                   'name': self.ids.entry_name.text,
+                   'raum':self.ids.entry_raum.text,
+                   'type': self.ids.entry_typ.text,
+                   'kategorie': self.ids.entry_art.text,
+                   'ausgeliehen': self.ids.entry_ausgeliehen.text,
+                   'status': self.ids.entry_status.text,
+                   'anzahl': self.ids.entry_anzahl.text,
+                   'bemerkung':  self.ids.entry_bemerkung.text}
+        print(dataNew)
+        control.saveObejct(dataNew)
+        print("Clara ist schlau")
 
 
 class AddUses(Screen):
     def saveInv(self):
-        if control.saveObject():  # Hier ist der Callback
+        if control.saveObejct():  # Hier ist der Callback
             popup = Popup(title='Gespeichert',
                           content=Label(text="Neues Gebrauchsmaterial\nwurde gespeichert!"),
                           size_hint=(None, None), size=(200, 100))
         popup.open()
 
 
-class TableBox(BoxLayout):
-    def __init__(self, data, columns, **kwargs):
-        self.table_data = data
-        self.columns = columns
-        super().__init__(**kwargs)
+class RV(RecycleView):
+    def __init__(self, **kwargs):
+        super(RV, self).__init__(**kwargs)
+
+        abfage = control.getData()
+        self.data = {int(key): {spalte: str(wert) for spalte, wert in enumerate(inhalt)} for key, inhalt in
+                     enumerate(abfage)}
 
 
 class Table(BoxLayout):
-    def __init__(self, **kwargs):
+    def __init__(self, table='', **kwargs):
         super().__init__(**kwargs)
-        self.columns: int = 0
-        self.table_data: list = []
-        self.popupWindow: Popup or None = None
 
-        self.createTableData(control.getData())
+        data = control.getData()
 
-    def createTableData(self, data: dict[str, dict[int, str]]):
         column_titles = [x for x in data.keys()]
         rows_length = len(data[column_titles[0]])
         self.columns = len(column_titles)
 
         self.table_data = []
-
         for y in column_titles:
             self.table_data.append(
                 {'text': str(y), 'size_hint_y': None, 'height': 30, 'bcolor': (1.0, .31, 0.0, 1)})
@@ -166,17 +193,15 @@ class Table(BoxLayout):
             for y in column_titles:
                 self.table_data.append(
                     {'text': str(data[y][z]), 'size_hint_y': None, 'height': 20, 'bcolor': (.06, .25, .50, 1)})
+        print("Claraistdoof", len(self.table_data)/9)
+        a = (len(self.table_data)/9) -2
+        b = a*20+a*5
+        print(b)
+        # self.ids.table_floor_layout.cols = self.columns   # define value of cols to the value of self.columns
+        # self.ids.table_floor.data = self.table_data       # add self.table_data to data value
 
-    def callback_suche(self, text: str):
-        self.refreshTable(control.suche(text))
-
-    def refreshTable(self, table_data: dict[str, dict[int, str]]):
-        self.createTableData(table_data)
-        self.createTable()
-
-    def createTable(self):
-        self.clear_widgets(self.children[:1])
-        self.add_widget(TableBox(self.table_data, self.columns))
+    def callback_suche(self, text):
+        print(text)
 
     def filter(self):
         show = Popups(popup_close=self.popup_close, refreshTable=self.refreshTable)
@@ -224,6 +249,20 @@ class UIApp(App):
         self.sManage.add_widget(Einzelansicht(name='einzelansicht'))
         self.sManage.current = 'showAll'
         return self.sManage
+
+    def einzelinfo(self, id_input, x):
+        global id
+        id = id_input
+        print("Einzel", x)
+        if x == 0:
+            self.sManage.current = "einzelansicht"
+            self.sManage.transition.direction = "down"
+            #inhalt = control.getObjectByID(int(id))
+            #print(inhalt)
+        # self.sManage.entry_id.text = "Baguette"
+
+    def sorti(self):
+        print("sortiren")
 
 
 if __name__ == '__main__':
