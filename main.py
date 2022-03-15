@@ -136,6 +136,9 @@ class TableBox(BoxLayout):
         self.table_data = data
         self.columns = columns
         super().__init__(**kwargs)
+        self.columns: int = 0
+        self.table_data: list = []
+        self.popupWindow: Popup or None = None
 
 
 class Table(BoxLayout):
