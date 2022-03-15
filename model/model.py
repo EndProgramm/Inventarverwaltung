@@ -91,7 +91,6 @@ class Model():
         if max == "%":
             max = 2147483647        
         sql = f'SELECT * FROM "Material" WHERE (Name LIKE "%{search}%" OR Bemerkung LIKE "%{search}%") AND Typ LIKE "{typ}" AND Kategorie LIKE "{kategorie}" AND Raum LIKE "{raum}" AND (Ausgeliehen LIKE "{ausgeliehen}"{ausgeliehenisnull}) AND (Status LIKE "{status}"{statusisnull}) AND ((Anzahl >= {min} AND Anzahl <= {max}) OR Typ LIKE "Gg") ORDER BY "{sort}" {direction}'
-        print(sql+"\n")
         cur.execute(sql)
         fetched_data = cur.fetchall()
         return fetched_data
