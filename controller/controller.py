@@ -64,11 +64,12 @@ class Controller:
         return [i[0] for i in self.model.getKategorien()]
 
     def filterSpeichern(self, filterDict: dict[str, str]) -> dict[str, any]:
-        filterDict = {key: value if value != "kein Filter" else "%" for key, value in filterDict.items()}
-        if filterDict['Typ'] != '%':
-            filterDict['Typ'] = "Gg" if filterDict['Typ'] == "Gebrauch" else "Vg"
-
-        self.filter = filterDict
+        stehtfuer={"kein Filter":"%","":"%","Gebrauch":"Gg","Verbrauch":"Vg"}
+        for i in filterr:
+            if filterr[i] in stehtfuer:
+                self.filter[i]=stehtfuer[filterr[i]]
+            else:
+                self.filter[i]=filterr[i]
         return self.getData()
 
     def suche(self, suchbegriff: str) -> dict[dict]:
