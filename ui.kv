@@ -125,12 +125,19 @@
                     color: 1,0,0,1
                     canvas.before:
                         Color:
-                            rgba: 0, 0, 1, 1
+                            rgba: 0, 0, 0, 1
                         Rectangle:
                             pos: self.pos
                             size: self.size
                 Label:
                     id: entry_id
+                    color: 0,0,0,1
+                    canvas.before:
+                        Color:
+                            rgba: 1, 1, 1, 1
+                        Rectangle:
+                            pos: self.pos
+                            size: self.size
                 Label:
                     text: "Name"
                 TextInput:
@@ -371,5 +378,5 @@
         print(self.x, self.y) # y Position einer Reihe, wichtig für Verbesserung später
         #print(self.parent.children)
         kat = ("ID", "Name", "Typ", "Kategorie", "Raum", "Ausgeliehen", "Status", "Anzahl", "Bemerkung")
-        if self.text in kat: app.sorti()
+        if self.text in kat: app.sorti(self.text)
         else: app.einzelinfo(self.text, self.x)

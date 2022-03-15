@@ -99,7 +99,7 @@ class Einzelansicht(Screen):
                    'bemerkung':  self.ids.entry_bemerkung.text}
         print(dataNew)
         control.saveObejct(dataNew)
-        print("Clara ist schlau")
+
 
 
 class AddUses(Screen):
@@ -138,7 +138,7 @@ class Table(BoxLayout):
             for y in column_titles:
                 self.table_data.append(
                     {'text': str(data[y][z]), 'size_hint_y': None, 'height': 20, 'bcolor': (.06, .25, .50, 1)})
-        print("Claraistdoof", len(self.table_data)/9)
+        print("Clara ist super doof!", len(self.table_data)/9)
         a = (len(self.table_data)/9) -2
         b = a*20+a*5
         print(b)
@@ -188,8 +188,9 @@ class UIApp(App):
             #print(inhalt)
         # self.sManage.entry_id.text = "Baguette"
 
-    def sorti(self):
+    def sorti(self, inhalt):
         print("sortiren")
+        print("Eric ist doof!!!")
 
 
 if __name__ == '__main__':
