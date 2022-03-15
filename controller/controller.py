@@ -66,7 +66,18 @@ class Controller:
     def getKategorie(self):
         return [i[0] for i in self.model.getKategorien()]
 
-    def filterSpeichern(self, filterr: dict[str, str]) -> dict[str, any]:
+    def sortBy(self, sortierung: str) -> dict[dict]:
+        if self.sortierung == sortierung:
+            if self.direction == "ASC":
+                self.direction = "DESC"
+            else:
+                self.direction = "ASC"
+        else:
+            self.sortierung = sortierung
+            self.direction = "ASC"
+        return self.getData()
+
+    def filterSpeichern(self, filterr: dict[str, str]) -> dict[dict]:
         stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg", "funktionsfähig": "True",
                      "defekt": "False"}
         for i in filterr:
