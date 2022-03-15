@@ -63,13 +63,13 @@ class Controller:
     def getKategorie(self):
         return [i[0] for i in self.model.getKategorien()]
 
-    def filterSpeichern(self, filterDict: dict[str, str]) -> dict[str, any]:
-        stehtfuer={"kein Filter":"%","":"%","Gebrauch":"Gg","Verbrauch":"Vg"}
+    def filterSpeichern(self, filterr: dict[str, str]) -> dict[str, any]:
+        stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg"}
         for i in filterr:
             if filterr[i] in stehtfuer:
-                self.filter[i]=stehtfuer[filterr[i]]
+                self.filter[i] = stehtfuer[filterr[i]]
             else:
-                self.filter[i]=filterr[i]
+                self.filter[i] = filterr[i]
         return self.getData()
 
     def suche(self, suchbegriff: str) -> dict[dict]:
