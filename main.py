@@ -47,6 +47,8 @@ class AddConsum(Screen):
 
 class Popups(FloatLayout):
     popup_close = ObjectProperty(None)
+    refreshTable = ObjectProperty(None)
+
     typ_spinner = ObjectProperty()
     kategorie_spinner = ObjectProperty()
     raum_ent = ObjectProperty()
@@ -68,6 +70,8 @@ class Popups(FloatLayout):
             "anzahl_bis": self.anzahl_bis_ent.text,
             "ausleibahrkeit": self.ausleihbar_spinner.text
         }
+        print(control.filterSpeichern(dict))
+        return control.filterSpeichern(dict)
 
 
 class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand
@@ -111,7 +115,8 @@ class PopupAddVG(FloatLayout):  # Verbrauchsgegenstand
             "zustand": self.zustand_spinner.text,
             "bemerkung": self.bemerkung_ent.text
         }
-        print(dict)
+        print("control.saveObject(" + str(dict))
+        control.saveObject(dict)
 
 
 class ShowAll(Screen):
@@ -174,7 +179,7 @@ class Table(BoxLayout):
         self.add_widget(TableBox(self.table_data, self.columns))
 
     def filter(self):
-        show = Popups(popup_close=self.popup_close)
+        show = Popups(popup_close=self.popup_close, refreshTable=self.refreshTable)
         self.popupWindow = Popup(title="Filter", title_align="center",
                                  content=show, auto_dismiss=True,
                                  size_hint=(None, None), size=(300, 400))

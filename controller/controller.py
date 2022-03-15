@@ -26,7 +26,7 @@ class Controller:
 
     def saveObject(self, newObject: dict) -> bool:
         if newObject.get("name") is None or newObject.get("typ") is None or newObject.get("kategorie") is None or \
-                newObject.get("raum"):
+                newObject.get("raum") is None:
             raise Exception('Missing arguments')
         else:
             if newObject.get("ID") is not None:

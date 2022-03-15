@@ -346,10 +346,10 @@
             size_hint: 1, 0.1
             on_release:
                 root.popup_close()
-                root.speichern()
+                root.refreshTable(root.speichern())
             multiline: False
 
-<Popup_add_GG>
+<PopupAddGG>
     name_ent: name
     kategorie_ent: kategorie
     raum_ent: raum
@@ -409,7 +409,7 @@
                 root.speichern()
             multiline: False
 
-<Popup_add_VG>
+<PopupAddVG>
     name_ent: name
     kategorie_ent: kategorie
     raum_ent: raum
