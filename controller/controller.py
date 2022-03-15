@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # Controller für die Inventarverwaltung
-import pprint
 
 from model.model import Model
 
@@ -8,11 +7,12 @@ from model.model import Model
 class Controller:
     def __init__(self):
         self.model = Model()
+
         self.filter = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
                        'ausleibahrkeit': '%'}
         self.such = ""
 
-    def getData(self) -> dict[dict]:
+    def getData(self) -> dict[str, dict[int, str]]:
         abfrage = self.model.getInventory()
         erg = [[spalte] for spalte in
                ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Status', 'Anzahl', 'Bemerkung']]
@@ -46,35 +46,37 @@ class Controller:
             return True
 
     def getObjectByID(self, ID: int) -> dict:
-        material = self.model.getData(str(ID))
-        print(material)
+        material = self.model.getData(ID)
         if material:
-            return {'ID': ID, 'name': material[0][1], 'type': material[0][2], 'kategorie': material[0][3],
-                    'raum': material[0][4], 'ausgeliehen': material[0][5], 'status': material[0][6],
-                    'anzahl': material[0][7], 'bemerkung': material[0][8]}
+            return {'ID': ID, 'Name': material[0][1], 'Type': material[0][2], 'Kategorie': material[0][3],
+                    'Ausgeliehen': material[0][4], 'Status': material[0][5],
+                    'Anzahl': material[0][6], 'Bemerkung': material[0][7]}
         else:
-            return {'ID': ID, 'name': "null", 'type': "null", 'kategorie': "null", 'raum': 'null',
-                    'ausgeliehen': "null", 'Status': "null", 'anzahl': "null", 'bemerkung': "null"}
+            return {'ID': ID, 'Name': "null", 'Type': "null", 'Kategorie': "null", 'Ausgeliehen': "null",
+                    'Status': "null",
+                    'Anzahl': "null", 'Bemerkung': "null"}
 
-        def delObject(self, ID: int) -> bool:
-            self.model.deleteInventory(ID)
-            return self.existsObject(ID)
+    def delObject(self, ID: int) -> bool:
+        self.model.deleteInventory(ID)
+        return self.existsObject(ID)
 
-        def getKategorie(self):
-            return [i[0] for i in self.model.getKategorien()]
+    def getKategorie(self):
+        return [i[0] for i in self.model.getKategorien()]
 
-        def filterSpeichern(self, filterr):
-            for i in filterr:
-                if filterr[i] == "kein Filter" or filterr[i] == "":
-                    self.filter[i] = "%"
-                else:
-                    self.filter[i] = filterr[i]
-            return self.getData()
+    def filterSpeichern(self, filterDict: dict[str, str]) -> dict[str, any]:
+        stehtfuer={"kein Filter":"%","":"%","Gebrauch":"Gg","Verbrauch":"Vg"}
+        for i in filterr:
+            if filterr[i] in stehtfuer:
+                self.filter[i]=stehtfuer[filterr[i]]
+            else:
+                self.filter[i]=filterr[i]
+        return self.getData()
 
-        def suche(self, suchbegriff: str) -> dict[dict]:
-            self.such = "%" + suchbegriff + "%"
-            return self.getData()
+    def suche(self, suchbegriff: str) -> dict[dict]:
+        self.such = "%" + suchbegriff + "%"
+        return self.getData()
 
-    if __name__ == '__main__':
-        # Für tests des Controllers (Achtung greift natürlich trotzdem auf die anderen Teile zu!)
-        c = Controller()
+
+if __name__ == '__main__':
+    # Für tests des Controllers (Achtung greift natürlich trotzdem auf die anderen Teile zu!)
+    c = Controller()
