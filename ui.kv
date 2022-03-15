@@ -222,10 +222,15 @@
             on_text_validate:
                 root.callback_suche(self.text)
         Button:
+            id: suchknopf
             size_hint: 0.1, 1
             size_hint_max_x: 50
             on_release:
                 root.callback_suche(suchfeld.text)
+            Image:
+                center:  suchknopf.right - suchknopf.width + 24, suchknopf.top - suchknopf.height + 3
+                size: suchknopf.width - 5, suchknopf.height - 5
+                source: 'assets/suchicon.png'
         Button:
             size_hint: 0.1, 1
             size_hint_max_x: 50
