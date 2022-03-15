@@ -46,37 +46,35 @@ class Controller:
             return True
 
     def getObjectByID(self, ID: int) -> dict:
-        material = self.model.getData(ID)
+        material = self.model.getData(str(ID))
+        print(material)
         if material:
-            return {'ID': ID, 'Name': material[0][1], 'Type': material[0][2], 'Kategorie': material[0][3],
-                    'Ausgeliehen': material[0][4], 'Status': material[0][5],
-                    'Anzahl': material[0][6], 'Bemerkung': material[0][7]}
+            return {'ID': ID, 'name': material[0][1], 'type': material[0][2], 'kategorie': material[0][3],
+                    'raum': material[0][4], 'ausgeliehen': material[0][5], 'status': material[0][6],
+                    'anzahl': material[0][7], 'bemerkung': material[0][8]}
         else:
-            return {'ID': ID, 'Name': "null", 'Type': "null", 'Kategorie': "null", 'Ausgeliehen': "null",
-                    'Status': "null",
-                    'Anzahl': "null", 'Bemerkung': "null"}
+            return {'ID': ID, 'name': "null", 'type': "null", 'kategorie': "null", 'raum': 'null',
+                    'ausgeliehen': "null", 'Status': "null", 'anzahl': "null", 'bemerkung': "null"}
 
-    def delObject(self, ID: int) -> bool:
-        self.model.deleteInventory(ID)
-        return self.existsObject(ID)
+        def delObject(self, ID: int) -> bool:
+            self.model.deleteInventory(ID)
+            return self.existsObject(ID)
 
-    def getKategorie(self):
-        return [i[0] for i in self.model.getKategorien()]
+        def getKategorie(self):
+            return [i[0] for i in self.model.getKategorien()]
 
-    def filterSpeichern(self, filterr):
-        for i in filterr:
-            if filterr[i] == "kein Filter" or filterr[i] == "":
-                self.filter[i] = "%"
-            else:
-                self.filter[i] = filterr[i]
-        return self.getData()
+        def filterSpeichern(self, filterr):
+            for i in filterr:
+                if filterr[i] == "kein Filter" or filterr[i] == "":
+                    self.filter[i] = "%"
+                else:
+                    self.filter[i] = filterr[i]
+            return self.getData()
 
-    def suche(self, suchbegriff: str) -> dict[dict]:
-        self.such = "%" + suchbegriff + "%"
-        return self.getData()
+        def suche(self, suchbegriff: str) -> dict[dict]:
+            self.such = "%" + suchbegriff + "%"
+            return self.getData()
 
-
-if __name__ == '__main__':
-    # Für tests des Controllers (Achtung greift natürlich trotzdem auf die anderen Teile zu!)
-    c = Controller()
-    c.getKategorie
+    if __name__ == '__main__':
+        # Für tests des Controllers (Achtung greift natürlich trotzdem auf die anderen Teile zu!)
+        c = Controller()
