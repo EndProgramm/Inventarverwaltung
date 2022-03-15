@@ -24,7 +24,7 @@
                     root.manager.current = "addUses"
                     root.manager.transition.direction = "right"
             Button:
-                id: "showButton"
+                id: "showAll"
                 text: "Inventar"
                 on_release:
                     root.manager.current = "showAll"
@@ -103,6 +103,10 @@
                     root.saveInv()
 
 <Einzelansicht>
+    on_enter:
+        self.entryFill()
+        print("abc", root.texte)
+
     GridLayout:
         cols:1
         bg: (1,1,1,1)
@@ -125,20 +129,26 @@
                         Rectangle:
                             pos: self.pos
                             size: self.size
-                TextInput:
-                    multiline: False
+                Label:
+                    id: entry_id
                 Label:
                     text: "Name"
                 TextInput:
+                    id: entry_name
                     multiline: False
+                    on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
                 Label:
                     text: "Raum"
                 TextInput:
+                    id: entry_raum
                     multiline: False
+                    on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
                 Label:
                     text: "Ausgeliehen"
                 TextInput:
+                    id: entry_ausgeliehen
                     multiline: False
+                    on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
             GridLayout:
                 cols: 2
                 padding: 10
@@ -146,19 +156,27 @@
                 Label:
                     text: "Art"
                 TextInput:
+                    id: entry_art
                     multiline: False
+                    on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
                 Label:
                     text: "Typ"
                 TextInput:
+                    id: entry_typ
                     multiline: False
+                    on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
                 Label:
                     text: "Anzahl"
                 TextInput:
+                    id: entry_anzahl
                     multiline: False
+                    on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
                 Label:
                     text: "Status"
                 TextInput:
+                    id: entry_status
                     multiline: False
+                    on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
         Label:
             text: "Bemerkung"
             text_size:self.size
@@ -168,6 +186,7 @@
             spacing: 10
 
         TextInput:
+            id: entry_bemerkung
             multiline: True
             size_hint: (1.0,0.25)
 
@@ -176,7 +195,7 @@
             size_hint: (1.0,0.25)
             Button:
                 id: "showAll"
-                text: "Abbrechen"
+                text: "Zurück"
                 on_release:
                     root.manager.current = "showAll"
                     root.manager.transition.direction = "up"
@@ -192,86 +211,67 @@
                 id: "showAll"
                 text: "Speichern"
                 on_release:
-                    root.manager.current = None
-                    root.manager.transition.direction = "up"
+                    root.speichern()
+                    root.manager.current = "showAll"
+                    root.manager.transition.direction = "down"
 
 <ShowAll>
-    id: showAll
     Table:
+        id: 'table'
+#        Label:
+#            id: "showAllEntry"
+#            text: root.inhalt
+#            text_size: root.width, root.height
 
 <Table>:
-    id: table_floor
-    orientation: 'vertical'
-    padding: (5, 5)
-    spacing: 5
+    id: 'main_win'
+
     BoxLayout:
-        size_hint: 1, 0.05
-        orientation: 'horizontal'
+        orientation: 'vertical'
+        padding: (5, 5)
         spacing: 5
-        TextInput:
-            id: suchfeld
+        BoxLayout:
+            size_hint: 1, 0.05
+            orientation: 'horizontal'
+            spacing: 5
+            TextInput:
+                id: suchfeld
 
-            size_hint: 0.3, 1
-            size_hint_max_x: 300
+                size_hint: 0.3, 1
+                size_hint_max_x: 300
 
-            background_color: (1, 1, 1, 0.8)
-            multiline: False
-            text: 'Suche'
+                background_color: (1, 1, 1, 0.8)
+                multiline: False
+                text: 'Suche'
+#                text_language: 'de'
+#                suggestion_text: 'Jep'
 
-            on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-            on_text_validate:
-                root.callback_suche(self.text)
-        Button:
-            size_hint: 0.1, 1
-            size_hint_max_x: 50
-            on_release:
-                root.callback_suche(suchfeld.text)
-        Button:
-            size_hint: 0.1, 1
-            size_hint_max_x: 50
-            text: "Filter"
-            on_release:
-                root.filter()
-        Button:
-            size_hint: 0.1, 1
-            size_hint_max_x: 100
-            text: "GG hinzufügen"
-            on_release:
-                root.add_GG()
-        Button:
-            size_hint: 0.1, 1
-            size_hint_max_x: 100
-            text: "VG hinzufügen"
-            on_release:
-                root.add_VG()
-
-    BoxLayout:
+                on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+                on_text_validate:
+                    root.callback_suche(self.text)
+            Button:
+                size_hint: 0.1, 1
+                size_hint_max_x: 50
+                on_release:
+                    root.callback_suche(suchfeld.text)
+            Button:
+                size_hint: 0.1, 1
+                size_hint_max_x: 50
+                text: "Filter"
+                on_release:
+                    root.filter()
         RecycleView:
             viewclass: 'CustomLabel'
+            id: 'table_floor'
             data: root.table_data
-            id: table_floor
             RecycleGridLayout:
-                id: table_floor_layout
+                id: 'table_floor_layout'
                 cols: root.columns
                 default_size: (None,250)
                 default_size_hint: (1,None)
                 size_hint_y: None
                 height: self.minimum_height
                 spacing: 5
-
-<TableBox>:
-    RecycleView:
-        viewclass: 'CustomLabel'
-        data: root.table_data
-        id: table_floor
-        RecycleGridLayout:
-            id: table_floor_layout
-            cols: root.columns
-            default_size: (None,250)
-            default_size_hint: (1,None)
-            size_hint_y: None
-            height: self.minimum_height
-            spacing: 5
 
 <Popups>
     typ_spinner: typ
@@ -301,7 +301,7 @@
             Spinner:
                 id: kategorie
                 text: "kein Filter"
-                values: root.kategorie()
+                values: "kein Filter","Computer", "Mobiliar", "Drucker"
             Label:
                 text: "Raum:"
             TextInput:
@@ -349,127 +349,6 @@
                 root.speichern()
             multiline: False
 
-<Popup_add_GG>
-    name_ent: name
-    kategorie_ent: kategorie
-    raum_ent: raum
-    ausleihbar_checkbox: ausleihbar
-    zustand_spinner: zustand
-    bemerkung_ent:bemerkung
-    GridLayout:
-        cols: 1
-        size: root.width, root.height
-        pos: root.pos
-        GridLayout:
-            cols: 2
-            padding: 10
-            spacing: 10
-            Label:
-                text:"Name:"
-            TextInput:
-                id: name
-                multiline: False
-            Label:
-                text: "Kategorie:"
-            TextInput:
-                id: kategorie
-                multiline: False
-            Label:
-                text: "Raum:"
-            TextInput:
-                id: raum
-                multiline: False
-            Label:
-                text: "ausleihbar:"
-            CheckBox:
-                id: ausleihbar
-            Label:
-                text: "Zustand:"
-            Spinner:
-                id: zustand
-                text: "funktionsfähig"
-                values: "funktionsfähig", "defekt"
-            Label:
-                text: "Bemerkungen:"
-            TextInput:
-                id: bemerkung
-                multiline: True
-
-
-        Button:
-            text: "zurück"
-            size_hint: 1, 0.1
-            on_release:
-                root.popup_add_GG_close()
-        Button:
-            text: "speichern"
-            size_hint: 1, 0.1
-            on_release:
-                root.popup_add_GG_close()
-                root.speichern()
-            multiline: False
-
-<Popup_add_VG>
-    name_ent: name
-    kategorie_ent: kategorie
-    raum_ent: raum
-    anzahl_ent: anzahl
-    zustand_spinner: zustand
-    bemerkung_ent:bemerkung
-    GridLayout:
-        cols: 1
-        size: root.width, root.height
-        pos: root.pos
-        GridLayout:
-            cols: 2
-            padding: 10
-            spacing: 10
-            Label:
-                text:"Name:"
-            TextInput:
-                id: name
-                multiline: False
-            Label:
-                text: "Kategorie:"
-            TextInput:
-                id: kategorie
-                multiline: False
-            Label:
-                text: "Raum:"
-            TextInput:
-                id: raum
-                multiline: False
-            Label:
-                text: "Zustand:"
-            Spinner:
-                id: zustand
-                text: "funktionsfähig"
-                values: "funktionsfähig", "defekt"
-            Label:
-                text: "Anzahl"
-            TextInput:
-                id: anzahl
-                multiline: False
-            Label:
-                text: "Bemerkungen:"
-            TextInput:
-                id: bemerkung
-                multiline: False
-
-
-        Button:
-            text: "zurück"
-            size_hint: 1, 0.1
-            on_release:
-                root.popup_add_VG_close()
-        Button:
-            text: "speichern"
-            size_hint: 1, 0.1
-            on_release:
-                root.popup_add_VG_close()
-                root.speichern()
-            multiline: False
-
 <CustomLabel@Button>:
     bcolor: (1, 1, 1, 1)
     background_color: 1, .3, .4, .85
@@ -488,9 +367,9 @@
 
     on_release:
         print(self.text)
-        print(self.y) # y Position einer Reihe, wichtig für Verbesserung später
-
+        print(self.size)
+        print(self.x, self.y) # y Position einer Reihe, wichtig für Verbesserung später
+        #print(self.parent.children)
         kat = ("ID", "Name", "Typ", "Kategorie", "Raum", "Ausgeliehen", "Status", "Anzahl", "Bemerkung")
-        if self.text in kat: print("sortieren")
-        else: app.sManage.current = "einzelansicht"
-        app.sManage.transition.direction = "down"
+        if self.text in kat: app.sorti()
+        else: app.einzelinfo(self.text, self.x)
