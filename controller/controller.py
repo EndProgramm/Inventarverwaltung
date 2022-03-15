@@ -23,21 +23,21 @@ class Controller:
                 zeile in erg}
 
     def saveObject(self, newObject: dict) -> bool:
-        if newObject.get("Name") is None or newObject.get("Typ") is None or newObject.get("Kategorie") is None or \
-                newObject.get("Raum") is None or newObject.get("Anzahl"):
+        if newObject.get("name") is None or newObject.get("typ") is None or newObject.get("kategorie") is None or \
+                newObject.get("raum"):
             raise Exception('Missing arguments')
         else:
             if newObject.get("ID") is not None:
-                self.model.updateInventory(newObject.get("ID"), newObject.get("Name"), newObject.get("Typ"),
-                                           newObject.get("Kategorie"), newObject.get("Raum"),
-                                           newObject.get("Ausgeliehen"), newObject.get("Status"),
-                                           newObject.get("Anzahl"), newObject.get("Bemerkung"))
+                self.model.updateInventory(newObject.get("ID"), newObject.get("name"), newObject.get("typ"),
+                                           newObject.get("kategorie"), newObject.get("raum"),
+                                           newObject.get("ausgeliehen"), newObject.get("status"),
+                                           newObject.get("anzahl"), newObject.get("bemerkung"))
                 return True
             else:
-                return self.existsObject(self.model.addInventory(newObject.get("Name"), newObject.get("Typ"),
-                                                                 newObject.get("Kategorie"), newObject.get("Raum"),
-                                                                 newObject.get("Ausgeliehen"), newObject.get("Status"),
-                                                                 newObject.get("Anzahl"), newObject.get("Bemerkung")))
+                return self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
+                                                                 newObject.get("kategorie"), newObject.get("raum"),
+                                                                 newObject.get("ausgeliehen"), newObject.get("status"),
+                                                                 newObject.get("anzahl"), newObject.get("bemerkung")))
 
     def existsObject(self, ID: int) -> bool:
         if self.model.getData(ID):
