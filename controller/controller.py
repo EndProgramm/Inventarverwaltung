@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # Controller für die Inventarverwaltung
-import pprint
 
 from model.model import Model
 
@@ -8,11 +7,12 @@ from model.model import Model
 class Controller:
     def __init__(self):
         self.model = Model()
+
         self.filter = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
                        'ausleibahrkeit': '%'}
         self.such = ""
 
-    def getData(self) -> dict[dict]:
+    def getData(self) -> dict[str, dict[int, str]]:
         abfrage = self.model.getInventory()
         erg = [[spalte] for spalte in
                ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Status', 'Anzahl', 'Bemerkung']]
@@ -48,12 +48,12 @@ class Controller:
     def getKategorie(self):
         return [i[0] for i in self.model.getKategorien()]
 
-    def filterSpeichern(self, filterr):
-        for i in filterr:
-            if filterr[i] == "kein Filter" or filterr[i] == "":
-                self.filter[i] = "%"
-            else:
-                self.filter[i] = filterr[i]
+    def filterSpeichern(self, filterDict: dict[str, str]) -> dict[str, any]:
+        filterDict = {key: value if value != "kein Filter" else "%" for key, value in filterDict.items()}
+        if filterDict['Typ'] != '%':
+            filterDict['Typ'] = "Gg" if filterDict['Typ'] == "Gebrauch" else "Vg"
+
+        self.filter = filterDict
         return self.getData()
 
     def suche(self, suchbegriff):
@@ -64,4 +64,3 @@ class Controller:
 if __name__ == '__main__':
     # Für tests des Controllers (Achtung greift natürlich trotzdem auf die anderen Teile zu!)
     c = Controller()
-    c.getKategorie
