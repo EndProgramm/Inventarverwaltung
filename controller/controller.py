@@ -46,15 +46,14 @@ class Controller:
             return True
 
     def getObjectByID(self, ID: int) -> dict:
-        material = self.model.getData(ID)
+        material = self.model.getData(str(ID))
         if material:
-            return {'ID': ID, 'Name': material[0][1], 'Type': material[0][2], 'Kategorie': material[0][3],
-                    'Ausgeliehen': material[0][4], 'Status': material[0][5],
-                    'Anzahl': material[0][6], 'Bemerkung': material[0][7]}
+            return {'ID': ID, 'name': material[0][1], 'type': material[0][2], 'kategorie': material[0][3],
+                    'raum': material[0][4], 'ausgeliehen': material[0][5], 'status': material[0][6],
+                    'anzahl': material[0][7], 'Bemerkung': material[0][8]}
         else:
-            return {'ID': ID, 'Name': "null", 'Type': "null", 'Kategorie': "null", 'Ausgeliehen': "null",
-                    'Status': "null",
-                    'Anzahl': "null", 'Bemerkung': "null"}
+            return {'ID': ID, 'name': "null", 'type': "null", 'kategorie': "null", 'raum': 'null',
+                    'ausgeliehen': "null", 'status': "null", 'anzahl': "null", 'bemerkung': "null"}
 
     def delObject(self, ID: int) -> bool:
         self.model.deleteInventory(ID)
@@ -63,12 +62,13 @@ class Controller:
     def getKategorie(self):
         return [i[0] for i in self.model.getKategorien()]
 
-    def filterSpeichern(self, filterDict: dict[str, str]) -> dict[str, any]:
-        filterDict = {key: value if value != "kein Filter" else "%" for key, value in filterDict.items()}
-        if filterDict['Typ'] != '%':
-            filterDict['Typ'] = "Gg" if filterDict['Typ'] == "Gebrauch" else "Vg"
-
-        self.filter = filterDict
+    def filterSpeichern(self, filterr: dict[str, str]) -> dict[str, any]:
+        stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg"}
+        for i in filterr:
+            if filterr[i] in stehtfuer:
+                self.filter[i] = stehtfuer[filterr[i]]
+            else:
+                self.filter[i] = filterr[i]
         return self.getData()
 
     def suche(self, suchbegriff: str) -> dict[dict]:
