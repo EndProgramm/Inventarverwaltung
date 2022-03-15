@@ -77,6 +77,24 @@ class Model():
         if fetched_data == []:
             return None
         return fetched_data[0]
+    
+    def filterAll(self,search,typ,kategorie,raum,ausgeliehen,status,min,max,sort,direction): #empty as %; search as search without %; Anzahl bei GG egal
+        cur = con.cursor()
+        ausgeliehenisnull = ""
+        if ausgeliehen == "%":
+            ausgeliehenisnull = " OR Ausgeliehen IS NULL "
+        statusisnull = ""        
+        if status == "%":
+            statusisnull = ''' OR Status IS NULL '''
+        if min == "%":
+            min = 0
+        if max == "%":
+            max = 2147483647        
+        sql = f'SELECT * FROM "Material" WHERE (Name LIKE "%{search}%" OR Bemerkung LIKE "%{search}%") AND Typ LIKE "{typ}" AND Kategorie LIKE "{kategorie}" AND Raum LIKE "{raum}" AND (Ausgeliehen LIKE "{ausgeliehen}"{ausgeliehenisnull}) AND (Status LIKE "{status}"{statusisnull}) AND ((Anzahl >= {min} AND Anzahl <= {max}) OR Typ LIKE "Gg") ORDER BY "{sort}" {direction}'
+        print(sql+"\n")
+        cur.execute(sql)
+        fetched_data = cur.fetchall()
+        return fetched_data
 
 
 if __name__ == '__main__':
