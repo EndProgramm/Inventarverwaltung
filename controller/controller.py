@@ -77,34 +77,35 @@ class Controller:
             self.direction = "ASC"
         return self.getData()
 
-    def filterSpeichern(self, filterr: dict[str, str]) -> dict[dict]:
+    def filterSpeichern(self, filterDict: dict[str, str]) -> dict[dict]:
         stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg", "funktionsfähig": "True",
                      "defekt": "False"}
-        for i in filterr:
-            if filterr[i] in stehtfuer:
-                self.filter[i] = stehtfuer[filterr[i]]
+        for i in filterDict:
+            if filterDict[i] in stehtfuer:
+                self.filter[i] = stehtfuer[filterDict[i]]
             else:
-                self.filter[i] = filterr[i]
+                self.filter[i] = filterDict[i]
         return self.getData()
 
     def suche(self, suchbegriff: str) -> dict[dict]:
         self.such = "%" + suchbegriff + "%"
         return self.getData()
-    
-    def getfilter(self):
-        stehtfuerrueckwarts={"%":"kein Filter","Gg":"Gebrauch","Vg":"Verbrauch","True":"funktionsfähig","False":"defekt"}
-        filterr = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
-                       'ausleibahrkeit': '%'}
+
+    def getFilter(self):
+        stehtfuerrueckwarts = {"%": "kein Filter", "Gg": "Gebrauch", "Vg": "Verbrauch", "True": "funktionsfähig",
+                               "False": "defekt"}
+        filterDict = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
+                   'ausleibahrkeit': '%'}
         for i in self.filter:
             if self.filter[i] in stehtfuerrueckwarts:
-                filterr[i]=stehtfuerrueckwarts[self.filter[i]]
+                filterDict[i] = stehtfuerrueckwarts[self.filter[i]]
             else:
-                filterr[i]=self.filter[i]
-        if filterr["anzahl_von"]=="kein Filter":
-            filterr["anzahl_von"] = ""
-        if filterr["anzahl_bis"]=="kein Filter":
-            filterr["anzahl_bis"] = ""
-        return filterr
+                filterDict[i] = self.filter[i]
+        if filterDict["anzahl_von"] == "kein Filter":
+            filterDict["anzahl_von"] = ""
+        if filterDict["anzahl_bis"] == "kein Filter":
+            filterDict["anzahl_bis"] = ""
+        return filterDict
 
 
 if __name__ == '__main__':
