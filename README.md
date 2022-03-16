@@ -5,7 +5,7 @@ Ein Projekt zur verwaltung des Inventares der GHO
 ## Code Style
 Als Namens-Konventionen werden drei Unterschiedliche verwendet, je nach aktuellem Bedarf.
 - Für Ordner(Pakete) und Dateien gilt lowercase
-- Für Datein gilt PascalCase
+- Für Klassen gilt PascalCase
 - Für Methoden und Variablen gilt camelCase
 
 > Raw: user login count -->
