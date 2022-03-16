@@ -88,14 +88,14 @@ class Controller:
         return self.getData()
 
     def suche(self, suchbegriff: str) -> dict[dict]:
-        self.such = "%" + suchbegriff + "%"
+        self.such = f"%'{suchbegriff}'%"
         return self.getData()
 
     def getFilter(self):
         stehtfuerrueckwarts = {"%": "kein Filter", "Gg": "Gebrauch", "Vg": "Verbrauch", "True": "funktionsfähig",
                                "False": "defekt"}
         filterDict = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
-                   'ausleibahrkeit': '%'}
+                      'ausleibahrkeit': '%'}
         for i in self.filter:
             if self.filter[i] in stehtfuerrueckwarts:
                 filterDict[i] = stehtfuerrueckwarts[self.filter[i]]
