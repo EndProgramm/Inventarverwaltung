@@ -32,7 +32,7 @@ class Model():
         self.verbindung.commit()
         
     def updateInventory(self,mID, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Updaten eines Datensatzes (Values as String with Value, Empty → None)
-        self.zeiger.execute('UPDATE "Material" SET Name = ?, Typ = ?, Kategorie = ?, Raum = ?, Ausgeliehen = ?, Status = ?, Anzahl = ?, Bemerkung = ? WHERE mID = ?;mID, (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung,mID))
+        self.zeiger.execute('UPDATE "Material" SET Name = ?, Typ = ?, Kategorie = ?, Raum = ?, Ausgeliehen = ?, Status = ?, Anzahl = ?, Bemerkung = ? WHERE mID = ?;', (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung,mID))
         self.verbindung.commit()
         
     def altsortInventory(self, column, direction): #Sortieren, dass keine Suche und Filterung berücksichtigt
