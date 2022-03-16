@@ -94,7 +94,9 @@ class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand
             "zustand": self.zustand_spinner.text,
             "bemerkung": self.bemerkung_ent.text
         }
-        print(dict)
+        print("control.saveObject(" + str(dict))
+        control.saveObject(dict)
+
 
 
 class PopupAddVG(FloatLayout):  # Verbrauchsgegenstand
