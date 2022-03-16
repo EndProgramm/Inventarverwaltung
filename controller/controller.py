@@ -100,6 +100,11 @@ class Controller:
                 filterr[i]=stehtfuerrueckwarts[self.filter[i]]
             else:
                 filterr[i]=self.filter[i]
+        if filterr["anzahl_von"]=="kein Filter":
+            filterr["anzahl_von"] = ""
+        if filterr["anzahl_bis"]=="kein Filter":
+            filterr["anzahl_bis"] = ""
+        return filterr
 
 
 if __name__ == '__main__':
