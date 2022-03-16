@@ -159,33 +159,39 @@ class Einzelansicht(Screen):
 
 class AddUses(Screen):
     def saveInv(self):
-        if control.saveObejct():  # Hier ist der Callback
+        if control.saveObject():  # Hier ist der Callback
             popup = Popup(title='Gespeichert',
                           content=Label(text="Neues Gebrauchsmaterial\nwurde gespeichert!"),
                           size_hint=(None, None), size=(200, 100))
         popup.open()
 
 
-class RV(RecycleView):
-    def __init__(self, **kwargs):
-        super(RV, self).__init__(**kwargs)
-
-        abfage = control.getData()
-        self.data = {int(key): {spalte: str(wert) for spalte, wert in enumerate(inhalt)} for key, inhalt in
-                     enumerate(abfage)}
+class TableBox(BoxLayout):
+    def __init__(self, data, columns, **kwargs):
+        self.table_data = data
+        self.columns = columns
+        super().__init__(**kwargs)
+        self.columns: int = 0
+        self.table_data: list = []
+        self.popupWindow: Popup or None = None
 
 
 class Table(BoxLayout):
-    def __init__(self, table='', **kwargs):
+    def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.columns: int = 0
+        self.table_data: list = []
+        self.popupWindow: Popup or None = None
 
-        data = control.getData()
+        self.createTableData(control.getData())
 
+    def createTableData(self, data: dict[str, dict[int, str]]):
         column_titles = [x for x in data.keys()]
         rows_length = len(data[column_titles[0]])
         self.columns = len(column_titles)
 
         self.table_data = []
+
         for y in column_titles:
             self.table_data.append(
                 {'text': str(y), 'size_hint_y': None, 'height': 30, 'bcolor': (1.0, .31, 0.0, 1)})
@@ -193,15 +199,17 @@ class Table(BoxLayout):
             for y in column_titles:
                 self.table_data.append(
                     {'text': str(data[y][z]), 'size_hint_y': None, 'height': 20, 'bcolor': (.06, .25, .50, 1)})
-        print("Clara ist super doof!", len(self.table_data)/9)
-        a = (len(self.table_data)/9) -2
-        b = a*20+a*5
-        print(b)
-        # self.ids.table_floor_layout.cols = self.columns   # define value of cols to the value of self.columns
-        # self.ids.table_floor.data = self.table_data       # add self.table_data to data value
 
-    def callback_suche(self, text):
-        print(text)
+    def callback_suche(self, text: str):
+        self.refreshTable(control.suche(text))
+
+    def refreshTable(self, table_data: dict[str, dict[int, str]]):
+        self.createTableData(table_data)
+        self.createTable()
+
+    def createTable(self):
+        self.clear_widgets(self.children[:1])
+        self.add_widget(TableBox(self.table_data, self.columns))
 
     def filter(self):
         show = Popups(popup_close=self.popup_close, refreshTable=self.refreshTable)
