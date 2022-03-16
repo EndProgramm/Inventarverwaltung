@@ -106,6 +106,11 @@ class Controller:
         if filterDict["anzahl_bis"] == "kein Filter":
             filterDict["anzahl_bis"] = ""
         return filterDict
+    
+    def defektmelden(self, mID):
+        x=self.model.filterAll(mID,"%","%","%","%","%","%","%","%",self.sortierung,self.direction)
+        [(1, 'Tisch_01', 'Gg', 'Möbel', 'F61', 'False', 'True', None, None)]
+        self.model.updateInventory(mID, x[0][1],x[0][2],x[0][3],x[0][4],x[0][5],"False",x[0][7],x[0][8])
 
 
 if __name__ == '__main__':
