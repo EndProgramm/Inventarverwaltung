@@ -88,7 +88,7 @@ class Controller:
         return self.getData()
 
     def suche(self, suchbegriff: str) -> dict[dict]:
-        self.such = f"%'{suchbegriff}'%"
+        self.such = f"%{suchbegriff}%"
         return self.getData()
 
     def getFilter(self):
