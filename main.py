@@ -191,6 +191,7 @@ class Table(BoxLayout):
         column_titles = [x for x in data.keys()]
         rows_length = len(data[column_titles[0]])
         self.columns = len(column_titles)
+        print("claraistgemein\n", data)
 
         self.table_data = []
 
@@ -273,7 +274,6 @@ class UIApp(App):
 
     def sorti(self, inhalt):
         print("sortiren")
-        print("Eric ist doof!!!")
 
 
 if __name__ == '__main__':

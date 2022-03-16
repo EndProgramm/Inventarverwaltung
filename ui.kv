@@ -641,9 +641,9 @@
 
     on_release:
         print(self.text)
-        print(self.y) # y Position einer Reihe, wichtig für Verbesserung später
-
+        print(self.parent)
+        print(self.x, self.y) # y Position einer Reihe, wichtig für Verbesserung später
+        #print(self.parent.children)
         kat = ("ID", "Name", "Typ", "Kategorie", "Raum", "Ausgeliehen", "Status", "Anzahl", "Bemerkung")
-        if self.text in kat: print("sortieren")
-        else: app.sManage.current = "einzelansicht"
-        app.sManage.transition.direction = "down"
+        if self.text in kat: app.sorti(self.text)
+        else: app.einzelinfo(self.text, self.x)
