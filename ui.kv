@@ -211,6 +211,7 @@
                 id: "showAll"
                 text: "Defekt melden"
                 on_release:
+                    root.defektmelden()
                     root.manager.current = None
                     root.manager.transition.direction = "up"
 

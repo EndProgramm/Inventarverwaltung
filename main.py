@@ -157,6 +157,8 @@ class Einzelansicht(Screen):
         print(dataNew)
         control.saveObejct(dataNew)
 
+    def defektmelden(self):
+        control.defektmelden(int(self.ids.entry_id.text))
 
 
 class AddUses(Screen):
@@ -268,9 +270,6 @@ class UIApp(App):
         if x == 0:
             self.sManage.current = "einzelansicht"
             self.sManage.transition.direction = "down"
-            #inhalt = control.getObjectByID(int(id))
-            #print(inhalt)
-        # self.sManage.entry_id.text = "Baguette"
 
     def sorti(self, inhalt):
         print("sortiren")
