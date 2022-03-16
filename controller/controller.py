@@ -15,7 +15,7 @@ class Controller:
         print(self.filter["ausleibahrkeit"])
 
     def getData(self) -> dict[dict]:
-        abfrage = self.model.filterAll(self.such, self.filter["typ"], self.filter["kategorie"], self.filter["raum"],
+        abfrage = self.model.filterAll("",self.such, self.filter["typ"], self.filter["kategorie"], self.filter["raum"],
                                        self.filter["ausleibahrkeit"], self.filter["zustand"], self.filter['anzahl_von'],
                                        self.filter['anzahl_bis'], self.sortierung, self.direction)
         erg = [[spalte] for spalte in
@@ -88,7 +88,7 @@ class Controller:
         return self.getData()
 
     def suche(self, suchbegriff: str) -> dict[dict]:
-        self.such = f"%'{suchbegriff}'%"
+        self.such = f"%{suchbegriff}%"
         return self.getData()
 
     def getFilter(self):
@@ -109,7 +109,6 @@ class Controller:
     
     def defektmelden(self, mID):
         x=self.model.filterAll(mID,"%","%","%","%","%","%","%","%",self.sortierung,self.direction)
-
         self.model.updateInventory(mID, x[0][1],x[0][2],x[0][3],x[0][4],x[0][5],"False",x[0][7],x[0][8])
 
 
