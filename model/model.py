@@ -22,17 +22,17 @@ class Model():
     
     def addInventory(self, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Einfügen eines Datensatzes(Values as String with Value, Empty → None)
         self.zeiger.execute('INSERT INTO "Material" (Name, Typ, Kategorie, Raum, Ausgeliehen, Status, Anzahl, Bemerkung) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung))
-        mid = self.zeiger.lastrowid
+        mID = self.zeiger.lastrowid
         self.verbindung.commit()
-        return(mid)
+        return(mID)
     
-    def deleteInventory(self, mId):#Löschen eines Datensatzes
-        sql = "DELETE FROM Material WHERE mid='"+mId+"';"
+    def deleteInventory(self, mID):#Löschen eines Datensatzes
+        sql = "DELETE FROM Material WHERE mID='"+mID+"';"
         self.zeiger.execute(sql)
         self.verbindung.commit()
         
-    def updateInventory(self,mid, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Updaten eines Datensatzes (Values as String with Value, Empty → None)
-        self.zeiger.execute('UPDATE "Material" SET Name = ?, Typ = ?, Kategorie = ?, Raum = ?, Ausgeliehen = ?, Status = ?, Anzahl = ?, Bemerkung = ? WHERE MID = ?;', (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung,mid))
+    def updateInventory(self,mID, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Updaten eines Datensatzes (Values as String with Value, Empty → None)
+        self.zeiger.execute('UPDATE "Material" SET Name = ?, Typ = ?, Kategorie = ?, Raum = ?, Ausgeliehen = ?, Status = ?, Anzahl = ?, Bemerkung = ? WHERE mID = ?;mID, (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung,mID))
         self.verbindung.commit()
         
     def altsortInventory(self, column, direction): #Sortieren, dass keine Suche und Filterung berücksichtigt
@@ -40,7 +40,7 @@ class Model():
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def sortInventory(self, search, direction, sortcolumn = "MID", filtercolumn = None): #Sortieren, welches Suche und Filterung berücksichtigt
+    def sortInventory(self, search, direction, sortcolumn = "mID", filtercolumn = None): #Sortieren, welches Suche und Filterung berücksichtigt
         sql = "SELECT * from Material"
         if filtercolumn != None:
             sql += " WHERE {}".format(filtercolumn)
@@ -60,19 +60,19 @@ class Model():
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def checkInventory(self,name,typ,kategorie,raum,mid="%%"):#Überprüfung anhand Name Typ Kategorie und Raum ob ein Datensatz bereits vorhanden ist
-        self.zeiger.execute('SELECT * FROM "Material" WHERE Name = ? And Typ = ? AND Kategorie = ? AND Raum = ? and MID LIKE ?;', (name,typ,kategorie,raum,mid))
+    def checkInventory(self,name,typ,kategorie,raum,mID="%%"):#Überprüfung anhand Name Typ Kategorie und Raum ob ein Datensatz bereits vorhanden ist
+        self.zeiger.execute('SELECT * FROM "Material" WHERE Name = ? And Typ = ? AND Kategorie = ? AND Raum = ? and mID LIKE ?;', (name,typ,kategorie,raum,mID))
         if self.zeiger.fetchall()!=[]:
             return True
         return False
     
-    def getData(self,mid): #Ausgabe eines Datensatzes mittels ID(ID als "String")
-        sql = "SELECT * FROM Material WHERE MID = '"+str(mid)+"';"
+    def getData(self,mID): #Ausgabe eines Datensatzes mittels ID(ID als "String")
+        sql = "SELECT * FROM Material WHERE mID = '"+str(mID)+"';"
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def idData(self,id):  #Gibt Datensatz mit gewählter ID aus, falls nicht vorhanden None
-        self.zeiger.execute('SELECT * FROM "Material" WHERE MID = ?', [id])
+    def idData(self,mID):  #Gibt Datensatz mit gewählter ID aus, falls nicht vorhanden None
+        self.zeiger.execute('SELECT * FROM "Material" WHERE mID = ?', [mID])
         fetched_data = self.zeiger.fetchall()
         if fetched_data == []:
             return None
