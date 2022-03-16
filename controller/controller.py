@@ -15,7 +15,7 @@ class Controller:
         print(self.filter["ausleibahrkeit"])
 
     def getData(self) -> dict[dict]:
-        abfrage = self.model.filterAll(self.such, self.filter["typ"], self.filter["kategorie"], self.filter["raum"],
+        abfrage = self.model.filterAll("",self.such, self.filter["typ"], self.filter["kategorie"], self.filter["raum"],
                                        self.filter["ausleibahrkeit"], self.filter["zustand"], self.filter['anzahl_von'],
                                        self.filter['anzahl_bis'], self.sortierung, self.direction)
         erg = [[spalte] for spalte in
