@@ -91,7 +91,7 @@ class Model():
             max = 2147483647
         if mID != "":
             mID = f'AND mID = {mID} '            
-        sql = f'SELECT * FROM "Material" WHERE (Name LIKE "%{search}%" OR Bemerkung LIKE "%{search}%") AND Typ LIKE "{typ}" AND Kategorie LIKE "{kategorie}" AND Raum LIKE "{raum}" AND (Ausgeliehen LIKE "{ausgeliehen}"{ausgeliehenisnull}) AND (Status LIKE "{status}"{statusisnull}) {mID}AND ((Anzahl >= {min} AND Anzahl <= {max}) OR Typ LIKE "Gg") ORDER BY "{sort}" {direction}'
+        sql = f'SELECT * FROM "Material" WHERE (Name LIKE "%{search}%" OR Bemerkung LIKE "%{search}%") AND Typ LIKE "{typ}" AND Kategorie LIKE "{kategorie}" AND Raum LIKE "{raum}" AND (Ausgeliehen LIKE "{ausgeliehen}"{ausgeliehenisnull}) AND (Status LIKE "{status}"{statusisnull}) {mID}AND Anzahl >= {min} AND Anzahl <= {max}  ORDER BY "{sort}" {direction}'
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
 
@@ -99,4 +99,3 @@ class Model():
 if __name__ == '__main__':
     # Für tests
     pass
-
