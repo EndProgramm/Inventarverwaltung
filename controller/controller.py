@@ -15,7 +15,7 @@ class Controller:
         print(self.filter["ausleibahrkeit"])
 
     def getData(self) -> dict[dict]:
-        abfrage = self.model.filterAll("",self.such, self.filter["typ"], self.filter["kategorie"], self.filter["raum"],
+        abfrage = self.model.filterAll("", self.such, self.filter["typ"], self.filter["kategorie"], self.filter["raum"],
                                        self.filter["ausleibahrkeit"], self.filter["zustand"], self.filter['anzahl_von'],
                                        self.filter['anzahl_bis'], self.sortierung, self.direction)
         erg = [[spalte] for spalte in
@@ -27,21 +27,17 @@ class Controller:
                 zeile in erg}
 
     def saveObject(self, newObject: dict) -> bool:
-        if newObject.get("name") is None or newObject.get("typ") is None or newObject.get("kategorie") is None or \
-                newObject.get("raum") is None:
-            raise Exception('Missing arguments')
+        if newObject.get("ID") is not None:
+            self.model.updateInventory(str(newObject.get("ID")), newObject.get("name"), newObject.get("typ"),
+                                       newObject.get("kategorie"), newObject.get("raum"),
+                                       newObject.get("ausgeliehen"), newObject.get("status"),
+                                       newObject.get("anzahl"), newObject.get("bemerkung"))
+            return True
         else:
-            if newObject.get("ID") is not None:
-                self.model.updateInventory(str(newObject.get("ID")), newObject.get("name"), newObject.get("typ"),
-                                           newObject.get("kategorie"), newObject.get("raum"),
-                                           newObject.get("ausgeliehen"), newObject.get("status"),
-                                           newObject.get("anzahl"), newObject.get("bemerkung"))
-                return True
-            else:
-                return self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
-                                                                 newObject.get("kategorie"), newObject.get("raum"),
-                                                                 newObject.get("ausgeliehen"), newObject.get("status"),
-                                                                 newObject.get("anzahl"), newObject.get("bemerkung")))
+            return self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
+                                                             newObject.get("kategorie"), newObject.get("raum"),
+                                                             newObject.get("ausgeliehen"), newObject.get("status"),
+                                                             newObject.get("anzahl"), newObject.get("bemerkung")))
 
     def existsObject(self, ID: int) -> bool:
         if self.model.getData(ID):
@@ -106,10 +102,10 @@ class Controller:
         if filterDict["anzahl_bis"] == "kein Filter":
             filterDict["anzahl_bis"] = ""
         return filterDict
-    
+
     def defektmelden(self, mID):
-        x=self.model.filterAll(mID,"%","%","%","%","%","%","%","%",self.sortierung,self.direction)
-        self.model.updateInventory(mID, x[0][1],x[0][2],x[0][3],x[0][4],x[0][5],"False",x[0][7],x[0][8])
+        x = self.model.filterAll(mID, "%", "%", "%", "%", "%", "%", "%", "%", self.sortierung, self.direction)
+        self.model.updateInventory(mID, x[0][1], x[0][2], x[0][3], x[0][4], x[0][5], "False", x[0][7], x[0][8])
 
 
 if __name__ == '__main__':
