@@ -35,7 +35,6 @@ class AddInv(Screen):
     addUses = ObjectProperty()
     addConsum = ObjectProperty()
     showAll = ObjectProperty()
-    einzelansicht = ObjectProperty()
 
 
 class AddConsum(Screen):
@@ -71,6 +70,7 @@ class Popups(FloatLayout):
             "anzahl_bis": self.anzahl_bis_ent.text,
             "ausleibahrkeit": self.ausleihbar_spinner.text
         }
+        print(dict)
         print(control.filterSpeichern(dict))
         return control.filterSpeichern(dict)
 
@@ -125,40 +125,53 @@ class PopupAddVG(FloatLayout):  # Verbrauchsgegenstand
 class ShowAll(Screen):
     pass
 
-
-class Einzelansicht(Screen):
-    def __init__(self, **kwargs):
-        self.texte: dict[str, any] = {'None': None}
-        super().__init__(**kwargs)
+class Einzelansicht(FloatLayout):
+    #self.texte: dict[str, any] = {'None': None}
+    closeEinzelansicht = ObjectProperty(None)
+    entry_id = ObjectProperty()
+    entry_name = ObjectProperty()
+    entry_anzahl = ObjectProperty()
+    entry_kategorie = ObjectProperty()
+    entry_ausgeliehen = ObjectProperty()
+    entry_bemerkung = ObjectProperty()
+    entry_raum = ObjectProperty()
+    entry_typ = ObjectProperty()
+    entry_zustand = ObjectProperty()
 
     def entryFill(self):
-        global id
-        self.texte = control.getObjectByID(int(id))
-        self.ids.entry_id.text = str(self.texte.get("ID", "None"))
-        self.ids.entry_name.text = str(self.texte.get("name", "None"))
-        self.ids.entry_raum.text = str(self.texte.get("raum", "None"))
-        self.ids.entry_typ.text = str(self.texte.get("type", "None"))
-        self.ids.entry_art.text = str(self.texte.get("kategorie", "None"))
-        self.ids.entry_ausgeliehen.text = str(self.texte.get("ausgeliehen", "None"))
-        self.ids.entry_status.text = str(self.texte.get("status", "None"))
-        self.ids.entry_anzahl.text = str(self.texte.get("anzahl", "None"))
-        self.ids.entry_bemerkung.text = str(self.texte.get("bemerkung", "None"))
+        global mid
+        print(mid)
+        self.texte = control.getObjectByID(int(mid))
+        print(self.texte)
+        self.entry_id.text = str(self.texte.get("ID", "None"))
+        self.entry_name.text = str(self.texte.get("name", "None"))
+        self.entry_raum.text = str(self.texte.get("raum", "None"))
+        self.entry_typ.text = str(self.texte.get("typ", "None"))
+        self.entry_kategorie.text = str(self.texte.get("kategorie", "None"))
+        self.entry_ausgeliehen.text = str(self.texte.get("ausgeliehen", "None"))
+        self.entry_zustand.text = str(self.texte.get("status", "None"))
+        self.entry_anzahl.text = str(self.texte.get("anzahl", "None"))
+        self.entry_bemerkung.text = str(self.texte.get("bemerkung", "None"))
 
     def speichern(self):
-        dataNew = {'ID': int(self.ids.entry_id.text),
-                   'name': self.ids.entry_name.text,
-                   'raum':self.ids.entry_raum.text,
-                   'type': self.ids.entry_typ.text,
-                   'kategorie': self.ids.entry_art.text,
-                   'ausgeliehen': self.ids.entry_ausgeliehen.text,
-                   'status': self.ids.entry_status.text,
-                   'anzahl': self.ids.entry_anzahl.text,
-                   'bemerkung':  self.ids.entry_bemerkung.text}
+        dataNew = {'ID': int(self.entry_id.text),
+                   'name': self.entry_name.text,
+                   'raum':self.entry_raum.text,
+                   'typ': self.entry_typ.text,
+                   'kategorie': self.entry_kategorie.text,
+                   'ausgeliehen': self.entry_ausgeliehen.text,
+                   'status': self.entry_zustand.text,
+                   'anzahl': self.entry_anzahl.text,
+                   'bemerkung':  self.entry_bemerkung.text}
         print(dataNew)
-        control.saveObejct(dataNew)
+        control.saveObject(dataNew)
+
+    def kategorie(self):
+        return control.getKategorie()
 
     def defektmelden(self):
-        control.defektmelden(int(self.ids.entry_id.text))
+        #control.defektmelden(int(self.ids.entry_id.text))
+        pass
 
 
 class AddUses(Screen):
@@ -186,7 +199,7 @@ class Table(BoxLayout):
         self.columns: int = 0
         self.table_data: list = []
         self.popupWindow: Popup or None = None
-
+        self.popupEinzelansicht: Popup or None = None
         self.createTableData(control.getData())
 
     def createTableData(self, data: dict[str, dict[int, str]]):
@@ -215,6 +228,16 @@ class Table(BoxLayout):
     def createTable(self):
         self.clear_widgets(self.children[:1])
         self.add_widget(TableBox(self.table_data, self.columns))
+
+    def einzelansicht(self, id_input):
+        global mid
+        mid = id_input
+        show = Einzelansicht(closeEinzelansicht=self.closeEinzelansicht)
+        self.popupEinzelansicht = Popup(title="Einzelansicht", title_align="center",
+                                        content=show, auto_dismiss=True,
+                                        size_hint=(None,None), size=(600,400))
+        self.popupEinzelansicht.open()
+        show.entryFill()
 
     def filter(self):
         show = Popups(popup_close=self.popup_close, refreshTable=self.refreshTable)
@@ -246,6 +269,8 @@ class Table(BoxLayout):
     def popup_add_VG_close(self):
         self.popupWindow_add_VG.dismiss()
 
+    def closeEinzelansicht(self):
+        self.popupEinzelansicht.dismiss()
 
 class UIApp(App):
     """
@@ -259,7 +284,6 @@ class UIApp(App):
         self.sManage.add_widget(AddConsum(name='addConsum'))
         self.sManage.add_widget(AddUses(name='addUses'))
         self.sManage.add_widget(ShowAll(name='showAll'))
-        self.sManage.add_widget(Einzelansicht(name='einzelansicht'))
         self.sManage.current = 'showAll'
         return self.sManage
 
@@ -268,8 +292,9 @@ class UIApp(App):
         id = id_input
         print("Einzel", x)
         if x == 0:
-            self.sManage.current = "einzelansicht"
-            self.sManage.transition.direction = "down"
+            print("IDK")
+            #self.sManage.current = "einzelansicht"
+            #self.sManage.transition.direction = "down"
 
     def sorti(self, inhalt):
         print("sortiren")

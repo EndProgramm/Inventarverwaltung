@@ -2,6 +2,7 @@
 #:import Widget kivy.uix.widget
 #:import BoxLayout kivy.uix.boxlayout
 #:import Clock kivy.clock.Clock
+#:import Factory kivy.factory.Factory
 
 <AddInv>
     GridLayout:
@@ -103,18 +104,25 @@
                     root.saveInv()
 
 <Einzelansicht>
-    on_enter:
-        self.entryFill()
-        print("abc", root.texte)
-
+    entry_id: mid
+    entry_name: name
+    entry_anzahl:anzahl
+    entry_kategorie:kategorie
+    entry_ausgeliehen:ausgeliehen
+    entry_bemerkung:bemerkung
+    entry_raum:raum
+    entry_typ: typ
+    entry_zustand:zustand
     GridLayout:
         cols:1
         bg: (1,1,1,1)
+        size:root.width, root.height
+        pos:root.pos
         spacing: 10
         padding: 10
         GridLayout:
             cols: 2
-            size: root.width, root.height
+            padding: 10
             spacing: 10
             GridLayout:
                 cols: 2
@@ -125,12 +133,12 @@
                     color: 1,0,0,1
                     canvas.before:
                         Color:
-                            rgba: 0, 0, 0, 1
+                            rgba: 0, 0, 0, 0
                         Rectangle:
                             pos: self.pos
                             size: self.size
                 Label:
-                    id: entry_id
+                    id: mid
                     color: 0,0,0,1
                     canvas.before:
                         Color:
@@ -141,19 +149,19 @@
                 Label:
                     text: "Name"
                 TextInput:
-                    id: entry_name
+                    id: name
                     multiline: False
                     on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
                 Label:
                     text: "Raum"
                 TextInput:
-                    id: entry_raum
+                    id: raum
                     multiline: False
                     on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
                 Label:
-                    text: "Ausgeliehen"
+                    text: "Anzahl"
                 TextInput:
-                    id: entry_ausgeliehen
+                    id: anzahl
                     multiline: False
                     on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
             GridLayout:
@@ -161,29 +169,25 @@
                 padding: 10
                 spacing: 10
                 Label:
-                    text: "Art"
-                TextInput:
-                    id: entry_art
-                    multiline: False
-                    on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
-                Label:
                     text: "Typ"
-                TextInput:
-                    id: entry_typ
-                    multiline: False
-                    on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+                Spinner:
+                    id: typ
+                    values: "Gg", "Vg"
                 Label:
-                    text: "Anzahl"
-                TextInput:
-                    id: entry_anzahl
-                    multiline: False
-                    on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+                    text: "Kategorie"
+                Spinner:
+                    id: kategorie
+                    values: root.kategorie()
                 Label:
-                    text: "Status"
-                TextInput:
-                    id: entry_status
-                    multiline: False
-                    on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
+                    text: "Ausgeliehen"
+                Spinner:
+                    id: ausgeliehen
+                    values: "True", "False", "None"
+                Label:
+                    text: "Zustand"
+                Spinner:
+                    id: zustand
+                    values: "funktionsfähig", "defekt", "In Reperatur"
         Label:
             text: "Bemerkung"
             text_size:self.size
@@ -193,7 +197,7 @@
             spacing: 10
 
         TextInput:
-            id: entry_bemerkung
+            id: bemerkung
             multiline: True
             size_hint: (1.0,0.25)
 
@@ -204,24 +208,20 @@
                 id: "showAll"
                 text: "Zurück"
                 on_release:
-                    root.manager.current = "showAll"
-                    root.manager.transition.direction = "up"
+                    root.closeEinzelansicht()
 
             Button:
                 id: "showAll"
                 text: "Defekt melden"
                 on_release:
                     root.defektmelden()
-                    root.manager.current = None
-                    root.manager.transition.direction = "up"
 
             Button:
                 id: "showAll"
                 text: "Speichern"
                 on_release:
                     root.speichern()
-                    root.manager.current = "showAll"
-                    root.manager.transition.direction = "down"
+                    root.closeEinzelansicht()
 
 <ShowAll>
     id: showAll
@@ -641,10 +641,7 @@
     id: "einzelansicht"
 
     on_release:
-        print(self.text)
-        print(self.parent)
-        print(self.x, self.y) # y Position einer Reihe, wichtig für Verbesserung später
-        #print(self.parent.children)
+        lineID = self.parent.get_view_index_at([0,self.y])
         kat = ("ID", "Name", "Typ", "Kategorie", "Raum", "Ausgeliehen", "Status", "Anzahl", "Bemerkung")
         if self.text in kat: app.sorti(self.text)
-        else: app.einzelinfo(self.text, self.x)
+        else: root.parent.parent.parent.parent.einzelansicht(self.parent.parent.data[lineID].get("text"))

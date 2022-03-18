@@ -52,11 +52,11 @@ class Controller:
     def getObjectByID(self, ID: int) -> dict:
         material = self.model.getData(str(ID))
         if material:
-            return {'ID': ID, 'name': material[0][1], 'type': material[0][2], 'kategorie': material[0][3],
+            return {'ID': ID, 'name': material[0][1], 'typ': material[0][2], 'kategorie': material[0][3],
                     'raum': material[0][4], 'ausgeliehen': material[0][5], 'status': material[0][6],
-                    'anzahl': material[0][7], 'Bemerkung': material[0][8]}
+                    'anzahl': material[0][7], 'bemerkung': material[0][8]}
         else:
-            return {'ID': ID, 'name': "null", 'type': "null", 'kategorie': "null", 'raum': 'null',
+            return {'ID': ID, 'name': "null", 'typ': "null", 'kategorie': "null", 'raum': 'null',
                     'ausgeliehen': "null", 'status': "null", 'anzahl': "null", 'bemerkung': "null"}
 
     def delObject(self, ID: int) -> bool:
