@@ -70,8 +70,6 @@ class Popups(FloatLayout):
             "anzahl_bis": self.anzahl_bis_ent.text,
             "ausleibahrkeit": self.ausleihbar_spinner.text
         }
-        print(dict)
-        print(control.filterSpeichern(dict))
         return control.filterSpeichern(dict)
 
 
@@ -94,7 +92,6 @@ class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand
             "zustand": self.zustand_spinner.text,
             "bemerkung": self.bemerkung_ent.text
         }
-        print("control.saveObject(" + str(dict))
         control.saveObject(dict)
 
 
@@ -118,7 +115,6 @@ class PopupAddVG(FloatLayout):  # Verbrauchsgegenstand
             "zustand": self.zustand_spinner.text,
             "bemerkung": self.bemerkung_ent.text
         }
-        print("control.saveObject(" + str(dict))
         control.saveObject(dict)
 
 
@@ -140,9 +136,7 @@ class Einzelansicht(FloatLayout):
 
     def entryFill(self):
         global mid
-        print(mid)
         self.texte = control.getObjectByID(int(mid))
-        print(self.texte)
         self.entry_id.text = str(self.texte.get("ID", "None"))
         self.entry_name.text = str(self.texte.get("name", "None"))
         self.entry_raum.text = str(self.texte.get("raum", "None"))
@@ -163,7 +157,6 @@ class Einzelansicht(FloatLayout):
                    'status': self.entry_zustand.text,
                    'anzahl': self.entry_anzahl.text,
                    'bemerkung':  self.entry_bemerkung.text}
-        print(dataNew)
         control.saveObject(dataNew)
 
     def kategorie(self):
@@ -206,7 +199,6 @@ class Table(BoxLayout):
         column_titles = [x for x in data.keys()]
         rows_length = len(data[column_titles[0]])
         self.columns = len(column_titles)
-        print("claraistgemein\n", data)
 
         self.table_data = []
 
@@ -273,6 +265,10 @@ class Table(BoxLayout):
         self.popupEinzelansicht.dismiss()
         self.refreshTable(control.getData())
 
+    def sortieren(self, spalte: str):
+        table=control.sortBy(spalte)
+        self.refreshTable(table)
+
 class UIApp(App):
     """
     Basis der UI
@@ -287,18 +283,6 @@ class UIApp(App):
         self.sManage.add_widget(ShowAll(name='showAll'))
         self.sManage.current = 'showAll'
         return self.sManage
-
-    def einzelinfo(self, id_input, x):
-        global id
-        id = id_input
-        print("Einzel", x)
-        if x == 0:
-            print("IDK")
-            #self.sManage.current = "einzelansicht"
-            #self.sManage.transition.direction = "down"
-
-    def sorti(self, inhalt):
-        print("sortiren")
 
 
 if __name__ == '__main__':
