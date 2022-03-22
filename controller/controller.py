@@ -35,9 +35,9 @@ class Controller:
             return True
         else:
             if newObject.get("bemerkung")==None or newObject.get("bemerkung")=="None":
-                newObject.get("bemerkung")=""
+                newObject["bemerkung"]=""
             if newObject.get("kategorie")=="Gg":
-                newObject.get("anzahl")=1
+                newObject["anzahl"]=1
             if newObject.get("name") == "":
                 return "name"
             if newObject.get("raum") == "":
