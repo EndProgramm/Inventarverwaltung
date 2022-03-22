@@ -19,7 +19,7 @@ class Controller:
                                        self.filter["ausleibahrkeit"], self.filter["zustand"], self.filter['anzahl_von'],
                                        self.filter['anzahl_bis'], self.sortierung, self.direction)
         erg = [[spalte] for spalte in
-               ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Status', 'Anzahl', 'Bemerkung']]
+               ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Zustand', 'Anzahl', 'Bemerkung']]
         for liste in abfrage:
             for i, element in enumerate(liste):
                 erg[i].append(element)
@@ -30,7 +30,7 @@ class Controller:
         if newObject.get("ID") is not None:
             self.model.updateInventory(str(newObject.get("ID")), newObject.get("name"), newObject.get("typ"),
                                        newObject.get("kategorie"), newObject.get("raum"),
-                                       newObject.get("ausgeliehen"), newObject.get("status"),
+                                       newObject.get("ausgeliehen"), newObject.get("zustand"),
                                        newObject.get("anzahl"), newObject.get("bemerkung"))
             return True
         else:
@@ -46,7 +46,7 @@ class Controller:
                 return "kategorie"
             return self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
                                                              newObject.get("kategorie"), newObject.get("raum"),
-                                                             newObject.get("ausgeliehen"), newObject.get("status"),
+                                                             newObject.get("ausgeliehen"), newObject.get("zustand"),
                                                              newObject.get("anzahl"), newObject.get("bemerkung")))
 
     def existsObject(self, ID: int) -> bool:
@@ -59,11 +59,11 @@ class Controller:
         material = self.model.getData(str(ID))
         if material:
             return {'ID': ID, 'name': material[0][1], 'typ': material[0][2], 'kategorie': material[0][3],
-                    'raum': material[0][4], 'ausgeliehen': material[0][5], 'status': material[0][6],
+                    'raum': material[0][4], 'ausgeliehen': material[0][5], 'zustand': material[0][6],
                     'anzahl': material[0][7], 'bemerkung': material[0][8]}
         else:
             return {'ID': ID, 'name': "null", 'typ': "null", 'kategorie': "null", 'raum': 'null',
-                    'ausgeliehen': "null", 'status': "null", 'anzahl': "null", 'bemerkung': "null"}
+                    'ausgeliehen': "null", 'zustand': "null", 'anzahl': "null", 'bemerkung': "null"}
 
     def delObject(self, ID: int) -> bool:
         self.model.deleteInventory(ID)

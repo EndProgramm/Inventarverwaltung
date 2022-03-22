@@ -143,7 +143,7 @@ class Einzelansicht(FloatLayout):
         self.entry_typ.text = str(self.texte.get("typ", "None"))
         self.entry_kategorie.text = str(self.texte.get("kategorie", "None"))
         self.entry_ausgeliehen.text = str(self.texte.get("ausgeliehen", "None"))
-        self.entry_zustand.text = str(self.texte.get("status", "None"))
+        self.entry_zustand.text = str(self.texte.get("zustand", "None"))
         self.entry_anzahl.text = str(self.texte.get("anzahl", "None"))
         self.entry_bemerkung.text = str(self.texte.get("bemerkung", "None"))
 
@@ -154,7 +154,7 @@ class Einzelansicht(FloatLayout):
                    'typ': self.entry_typ.text,
                    'kategorie': self.entry_kategorie.text,
                    'ausgeliehen': self.entry_ausgeliehen.text,
-                   'status': self.entry_zustand.text,
+                   'zustand': self.entry_zustand.text,
                    'anzahl': self.entry_anzahl.text,
                    'bemerkung':  self.entry_bemerkung.text}
         control.saveObject(dataNew)
