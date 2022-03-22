@@ -15,18 +15,20 @@ class Controller:
         print(self.filter["ausleibahrkeit"])
 
     def getData(self) -> dict[dict]:
+        #gibt die Daten der Tabelle formatiert zurück
         abfrage = self.model.filterAll("", self.such, self.filter["typ"], self.filter["kategorie"], self.filter["raum"],
                                        self.filter["ausleibahrkeit"], self.filter["zustand"], self.filter['anzahl_von'],
-                                       self.filter['anzahl_bis'], self.sortierung, self.direction)
+                                       self.filter['anzahl_bis'], self.sortierung, self.direction)# die gespeicherten Filter werden angewendet
         erg = [[spalte] for spalte in
-               ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Zustand', 'Anzahl', 'Bemerkung']]
-        for liste in abfrage:
+               ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Zustand', 'Anzahl', 'Bemerkung']] #die Spaltennamen für die Tabelle
+        for liste in abfrage:#Daten werden formatiert, damit kivy die Daten ordentlich in dei Tabelle eintragen kann
             for i, element in enumerate(liste):
                 erg[i].append(element)
         return {zeile[0] if len(zeile) > 0 else print(len(zeile)): {i: spalte for i, spalte in enumerate(zeile[1:])} for
-                zeile in erg}
+                zeile in erg}#Daten werden fertig formatiert und ans view zurückgegeben
 
     def saveObject(self, newObject: dict) -> bool:
+        #fügt Werte in die Datenbank hinzu und updated diese
         if newObject.get("ID") is not None:
             self.model.updateInventory(str(newObject.get("ID")), newObject.get("name"), newObject.get("typ"),
                                        newObject.get("kategorie"), newObject.get("raum"),
