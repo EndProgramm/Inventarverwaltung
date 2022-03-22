@@ -2,7 +2,7 @@ import sqlite3
 
 class Model():
     def __init__(self):
-        self.verbindung = sqlite3.connect("model/inventar.db")
+        self.verbindung = sqlite3.connect("model\inventar.db")
         self.zeiger = self.verbindung.cursor()
 
     def getInventory(self): #Ausgabe aller Datensätze
@@ -20,8 +20,8 @@ class Model():
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
     
-    def addInventory(self, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Einfügen eines Datensatzes(Values as String with Value, Empty → None)
-        self.zeiger.execute('INSERT INTO "Material" (Name, Typ, Kategorie, Raum, Ausgeliehen, Status, Anzahl, Bemerkung) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung))
+    def addInventory(self, name,typ,kategorie,raum,ausgeliehen,zustand,anzahl,bemerkung): #Einfügen eines Datensatzes(Values as String with Value, Empty → None)
+        self.zeiger.execute('INSERT INTO "Material" (Name, Typ, Kategorie, Raum, Ausgeliehen, Zustand, Anzahl, Bemerkung) VALUES(?, ?, ?, ?, ?, ?, ?, ?)', (name,typ,kategorie,raum,ausgeliehen,zustand,anzahl,bemerkung))
         mID = self.zeiger.lastrowid
         self.verbindung.commit()
         return(mID)
@@ -31,8 +31,8 @@ class Model():
         self.zeiger.execute(sql)
         self.verbindung.commit()
         
-    def updateInventory(self,mID, name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung): #Updaten eines Datensatzes (Values as String with Value, Empty → None)
-        self.zeiger.execute('UPDATE "Material" SET Name = ?, Typ = ?, Kategorie = ?, Raum = ?, Ausgeliehen = ?, Status = ?, Anzahl = ?, Bemerkung = ? WHERE mID = ?;', (name,typ,kategorie,raum,ausgeliehen,status,anzahl,bemerkung,mID))
+    def updateInventory(self,mID, name,typ,kategorie,raum,ausgeliehen,zustand,anzahl,bemerkung): #Updaten eines Datensatzes (Values as String with Value, Empty → None)
+        self.zeiger.execute('UPDATE "Material" SET Name = ?, Typ = ?, Kategorie = ?, Raum = ?, Ausgeliehen = ?, Zustand = ?, Anzahl = ?, Bemerkung = ? WHERE mID = ?;', (name,typ,kategorie,raum,ausgeliehen,zustand,anzahl,bemerkung,mID))
         self.verbindung.commit()
         
     def altsortInventory(self, column, direction): #Sortieren, dass keine Suche und Filterung berücksichtigt
@@ -78,20 +78,20 @@ class Model():
             return None
         return fetched_data[0]
     
-    def filterAll(self,mID,search,typ,kategorie,raum,ausgeliehen,status,min,max,sort,direction): #empty as %; search as search without %; Anzahl bei GG egal
+    def filterAll(self,mID,search,typ,kategorie,raum,ausgeliehen,zustand,min,max,sort,direction): #empty as %; search as search without %; Anzahl bei GG egal
         ausgeliehenisnull = ""
         if ausgeliehen == "%":
             ausgeliehenisnull = " OR Ausgeliehen IS NULL "
-        statusisnull = ""        
-        if status == "%":
-            statusisnull = ''' OR Status IS NULL '''
+        zustandisnull = ""        
+        if zustand == "%":
+            zustandisnull = ''' OR Zustand IS NULL '''
         if min == "%":
             min = 0
         if max == "%":
             max = 2147483647
         if mID != "":
             mID = f'AND mID = {mID} '            
-        sql = f'SELECT * FROM "Material" WHERE (Name LIKE "%{search}%" OR Bemerkung LIKE "%{search}%") AND Typ LIKE "{typ}" AND Kategorie LIKE "{kategorie}" AND Raum LIKE "{raum}" AND (Ausgeliehen LIKE "{ausgeliehen}"{ausgeliehenisnull}) AND (Status LIKE "{status}"{statusisnull}) {mID}AND Anzahl >= {min} AND Anzahl <= {max}  ORDER BY "{sort}" {direction}'
+        sql = f'SELECT * FROM "Material" WHERE (Name LIKE "%{search}%" OR Bemerkung LIKE "%{search}%") AND Typ LIKE "{typ}" AND Kategorie LIKE "{kategorie}" AND Raum LIKE "{raum}" AND (Ausgeliehen LIKE "{ausgeliehen}"{ausgeliehenisnull}) AND (Zustand LIKE "{zustand}"{zustandisnull}) {mID}AND Anzahl >= {min} AND Anzahl <= {max}  ORDER BY "{sort}" {direction}'
         self.zeiger.execute(sql)
         return [dsatz for dsatz in self.zeiger]
 
