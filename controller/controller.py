@@ -34,6 +34,12 @@ class Controller:
                                        newObject.get("anzahl"), newObject.get("bemerkung"))
             return True
         else:
+            if newObject.get("bemerkung")==None or newObject.get("bemerkung")=="None":
+                newObject.get("bemerkung")=""
+            if newObject.get("kategorie")=="Gg":
+                newObject.get("anzahl")=1
+            if newObject.get("name") == "" or newObject.get("typ") == "" or newObject.get("kategorie") =="":
+                return False
             return self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
                                                              newObject.get("kategorie"), newObject.get("raum"),
                                                              newObject.get("ausgeliehen"), newObject.get("status"),
