@@ -15,41 +15,45 @@ class Controller:
         print(self.filter["ausleibahrkeit"])
 
     def getData(self) -> dict[dict]:
+        #gibt die Daten der Tabelle formatiert zurück
         abfrage = self.model.filterAll("", self.such, self.filter["typ"], self.filter["kategorie"], self.filter["raum"],
                                        self.filter["ausleibahrkeit"], self.filter["zustand"], self.filter['anzahl_von'],
-                                       self.filter['anzahl_bis'], self.sortierung, self.direction)
+                                       self.filter['anzahl_bis'], self.sortierung, self.direction)# die gespeicherten Filter werden angewendet
         erg = [[spalte] for spalte in
-               ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Zustand', 'Anzahl', 'Bemerkung']]
-        for liste in abfrage:
+               ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Zustand', 'Anzahl', 'Bemerkung']] #die Spaltennamen für die Tabelle
+        for liste in abfrage:#Daten werden formatiert, damit kivy die Daten ordentlich in dei Tabelle eintragen kann
             for i, element in enumerate(liste):
                 erg[i].append(element)
         return {zeile[0] if len(zeile) > 0 else print(len(zeile)): {i: spalte for i, spalte in enumerate(zeile[1:])} for
-                zeile in erg}
+                zeile in erg}#Daten werden fertig formatiert und ans view zurückgegeben
 
     def saveObject(self, newObject: dict) -> bool:
-        if newObject.get("ID") is not None:
+        #fügt Werte in die Datenbank hinzu und updated diese
+        if newObject.get("ID") is not None:#wenn eine ID mitübergeben wird, soll der Wert in der dATENBANK UPGEDATET WERDEN.
             self.model.updateInventory(str(newObject.get("ID")), newObject.get("name"), newObject.get("typ"),
                                        newObject.get("kategorie"), newObject.get("raum"),
                                        newObject.get("ausgeliehen"), newObject.get("zustand"),
                                        newObject.get("anzahl"), newObject.get("bemerkung"))
             return True
-        else:
+        else:# wenn nicht, werden erst die Werte geändert, wenn sie nicht den Formatirungsforgaben entspricht.
             if newObject.get("bemerkung")==None or newObject.get("bemerkung")=="None":
                 newObject["bemerkung"]=""
             if newObject.get("kategorie")=="Gg":
                 newObject["anzahl"]=1
-            if newObject.get("name") == "":
-                return "name"
+            if newObject.get("name") == "":#es wird geprüft ob alle benötigten Werte übergeben wurden. Falls nicht wird an View zurückgegeben wo ein Wert fehlt, damit diese eine Fehlermeldung erzeugen können.
+                return "Es fehlt der Name!"
             if newObject.get("raum") == "":
-                return "raum"
+                return "Es fehlt der Raum!"
             if newObject.get("kategorie") == "":
-                return "kategorie"
-            return self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
+                return "Es fehlt die Kategorie!"
+            if not self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
                                                              newObject.get("kategorie"), newObject.get("raum"),
                                                              newObject.get("ausgeliehen"), newObject.get("zustand"),
-                                                             newObject.get("anzahl"), newObject.get("bemerkung")))
-
+                                                             newObject.get("anzahl"), newObject.get("bemerkung"))):#der Datensatz wird zu der Datenbank hinzugefügt und geprüft ob er in der Datenbank drin ist oder ob es einen Fehler gab.
+                return "Fehler!"
+            
     def existsObject(self, ID: int) -> bool:
+        #es wird geprüft ob eine ID bereits in der Datenbank gespeichert ist 
         if self.model.getData(ID):
             return False
         else:
