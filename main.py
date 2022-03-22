@@ -271,6 +271,7 @@ class Table(BoxLayout):
 
     def closeEinzelansicht(self):
         self.popupEinzelansicht.dismiss()
+        self.refreshTable(control.getData())
 
 class UIApp(App):
     """
