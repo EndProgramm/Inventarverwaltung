@@ -41,16 +41,17 @@ class Controller:
             if newObject.get("kategorie")=="Gg":
                 newObject["anzahl"]=1
             if newObject.get("name") == "":#es wird geprüft ob alle benötigten Werte übergeben wurden. Falls nicht wird an View zurückgegeben wo ein Wert fehlt, damit diese eine Fehlermeldung erzeugen können.
-                return "name"
+                return "Es fehlt der Name!"
             if newObject.get("raum") == "":
-                return "raum"
+                return "Es fehlt der Raum!"
             if newObject.get("kategorie") == "":
-                return "kategorie"
-            return self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
+                return "Es fehlt die Kategorie!"
+            if not self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
                                                              newObject.get("kategorie"), newObject.get("raum"),
                                                              newObject.get("ausgeliehen"), newObject.get("zustand"),
-                                                             newObject.get("anzahl"), newObject.get("bemerkung")))#der Datensatz wird zu der Datenbank hinzugefügt und geprüft ob er in der Datenbank drin ist oder ob es einen Fehler gab.
-
+                                                             newObject.get("anzahl"), newObject.get("bemerkung"))):#der Datensatz wird zu der Datenbank hinzugefügt und geprüft ob er in der Datenbank drin ist oder ob es einen Fehler gab.
+                return "Fehler!"
+            
     def existsObject(self, ID: int) -> bool:
         #es wird geprüft ob eine ID bereits in der Datenbank gespeichert ist 
         if self.model.getData(ID):
