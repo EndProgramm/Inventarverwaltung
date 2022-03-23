@@ -15,52 +15,66 @@ class Controller:
         print(self.filter["ausleibahrkeit"])
 
     def getData(self) -> dict[dict]:
-        #gibt die Daten der Tabelle formatiert zurück
+        """
+        Gibt die Daten der Tabelle formatiert zurück
+        """
         abfrage = self.model.filterAll("", self.such, self.filter["typ"], self.filter["kategorie"], self.filter["raum"],
                                        self.filter["ausleibahrkeit"], self.filter["zustand"], self.filter['anzahl_von'],
-                                       self.filter['anzahl_bis'], self.sortierung, self.direction)# die gespeicherten Filter werden angewendet
+                                       self.filter['anzahl_bis'], self.sortierung,
+                                       self.direction)  # die gespeicherten Filter werden angewendet
         erg = [[spalte] for spalte in
-               ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Zustand', 'Anzahl', 'Bemerkung']] #die Spaltennamen für die Tabelle
-        for liste in abfrage:#Daten werden formatiert, damit kivy die Daten ordentlich in dei Tabelle eintragen kann
+               ['ID', 'Name', 'Typ', 'Kategorie', 'Raum', 'Ausgeliehen', 'Zustand', 'Anzahl',
+                'Bemerkung']]  # die Spaltennamen für die Tabelle
+        for liste in abfrage:  # Daten werden formatiert, damit kivy die Daten ordentlich in dei Tabelle eintragen kann
             for i, element in enumerate(liste):
                 erg[i].append(element)
         return {zeile[0] if len(zeile) > 0 else print(len(zeile)): {i: spalte for i, spalte in enumerate(zeile[1:])} for
-                zeile in erg}#Daten werden fertig formatiert und ans view zurückgegeben
+                zeile in erg}  # Daten werden fertig formatiert und ans view zurückgegeben
 
     def saveObject(self, newObject: dict) -> str:
-        #fügt Werte in die Datenbank hinzu und updated diese
-        if newObject.get("ID") is not None:#wenn eine ID mitübergeben wird, soll der Wert in der dATENBANK UPGEDATET WERDEN.
+        """
+        Speichert ein Objekt in der Datenbank, falls dieses bereits eine ID hat, wird dieses in der Datenbank
+        aktualisiert.
+        Sollte das Objekt nicht alle benötigten Argumente aufweisen oder beim Speichern zu einem Fehler kommen, so wird
+        eine Fehlermeldung als String zurückgegeben.
+        """
+        if newObject.get("ID") is not None:
             self.model.updateInventory(str(newObject.get("ID")), newObject.get("name"), newObject.get("typ"),
                                        newObject.get("kategorie"), newObject.get("raum"),
                                        newObject.get("ausgeliehen"), newObject.get("zustand"),
                                        newObject.get("anzahl"), newObject.get("bemerkung"))
-        else:# wenn nicht, werden erst die Werte geändert, wenn sie nicht den Formatirungsforgaben entspricht.
-            if newObject.get("bemerkung")==None or newObject.get("bemerkung")=="None":
-                newObject["bemerkung"]=""
-            if newObject.get("kategorie")=="Gg":
-                newObject["anzahl"]=1
-            if newObject.get("name") == "":#es wird geprüft ob alle benötigten Werte übergeben wurden. Falls nicht wird an View zurückgegeben wo ein Wert fehlt, damit diese eine Fehlermeldung erzeugen können.
+        else:
+            if newObject.get("bemerkung") is None or newObject.get("bemerkung") == "None":
+                newObject["bemerkung"] = ""
+            if newObject.get("kategorie") == "Gg":
+                newObject["anzahl"] = 1
+            if newObject.get("name") == "":
                 return "Es fehlt der Name!"
             if newObject.get("raum") == "":
                 return "Es fehlt der Raum!"
             if newObject.get("kategorie") == "":
                 return "Es fehlt die Kategorie!"
-            #der Datensatz wird zu der Datenbank hinzugefügt und geprüft ob er in der Datenbank drin ist oder ob es einen Fehler gab.
             if self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
-                                                             newObject.get("kategorie"), newObject.get("raum"),
-                                                             newObject.get("ausgeliehen"), newObject.get("zustand"),
-                                                             newObject.get("anzahl"), newObject.get("bemerkung"))):
+                                                         newObject.get("kategorie"), newObject.get("raum"),
+                                                         newObject.get("ausgeliehen"), newObject.get("zustand"),
+                                                         newObject.get("anzahl"), newObject.get("bemerkung"))):
                 return "Unbekannter Fehler!"
-            
+
     def existsObject(self, ID: int) -> bool:
-        #es wird geprüft ob eine ID bereits in der Datenbank gespeichert ist 
+        """
+        Es wird geprüft, ob eine ID bereits in der Datenbank gespeichert ist.
+        Returns True, wenn es vorhanden ist und False nicht.
+        """
         if self.model.getData(ID):
             return False
         else:
             return True
 
     def getObjectByID(self, ID: int) -> dict:
-        #Der Datensatz mit einer bestimmten ID wird zurückgegeben, wenn er nicht existiert wird ein leerer Datensatz zurückgegeben
+        """
+        Returns ein Objekt aus der Datenbank, für die gegebene ID.
+        Falls für die gegebene ID kein Objekt in der Datenbank gefunden werden konnte
+        """
         material = self.model.getData(str(ID))
         if material:
             return {'ID': ID, 'name': material[0][1], 'typ': material[0][2], 'kategorie': material[0][3],
@@ -71,17 +85,26 @@ class Controller:
                     'ausgeliehen': "null", 'zustand': "null", 'anzahl': "null", 'bemerkung': "null"}
 
     def delObject(self, ID: int) -> bool:
-        #Ein Datensatz wird mit der angabe der ID dieses Datensatzes gelöscht
+        """
+        Für die gegebene ID wird der dazugehörige Datensatz in der Datenbank gelöscht.
+        """
         self.model.deleteInventory(ID)
         return self.existsObject(ID)
 
     def getKategorie(self):
-        #Es werden alle Werte, die in der Spalte Kategorie stehen zurückgegeben
+        """
+        Gibt alle Werte, welche in der Spalte Kategorie stehen zurück
+        """
         return [i[0] for i in self.model.getKategorien()]
 
     def sortBy(self, sortierung: str) -> dict[dict]:
-        #Es wird eine nach einer bestimmten Spalte sortierte Tabelle zurückgegeben
-        if self.sortierung == sortierung: #wenn bereits nach der gleichen Spalte sortiert wird, wird die Sortierung umgedreht
+        """
+        Sortiert die Datensätze nach einer bestimmten Spalte.
+        Falls diese Sortierung bereits vorhanden ist, wird sie umgedreht:
+        ASC -> DESC
+        DESC -> ASC
+        """
+        if self.sortierung == sortierung:
             if self.direction == "ASC":
                 self.direction = "DESC"
             else:
@@ -92,10 +115,13 @@ class Controller:
         return self.getData()
 
     def filterSpeichern(self, filterDict: dict[str, str]) -> dict[dict]:
-        #der eingegebene Filter wird gespeichert
+        """
+        Speichert den angegebenen Filter und wendet diesen an.
+        Passt die Werte des Filters an die vorgaben der Datenbank an.
+        """
         stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg", "funktionsfähig": "True",
-                     "defekt": "False"}#Dict in dem Werte die der Filter zurück gibt in Werte umwandelt, die mit den Formatierungsvorgaben der Datenbank übereinstimmen
-        for i in filterDict:#filter wird durchlaufen und Werte den Vorgaben entsprechend verändert
+                     "defekt": "False"}
+        for i in filterDict:
             if filterDict[i] in stehtfuer:
                 self.filter[i] = stehtfuer[filterDict[i]]
             else:
@@ -103,7 +129,10 @@ class Controller:
         return self.getData()
 
     def suche(self, suchbegriff: str) -> dict[dict]:
-        #der Suchbegriff wird gespeichert und die Tabelle, bei der die Suche angewandt wurde, zurück gegeben
+        """
+        Die Datenbank wird nach dem Suchbegriff durchsucht und alle Ergebnisse zurückgegeben.
+        Der Suchbegriff wird gespeichert.
+        """
         self.such = f"%{suchbegriff}%"
         return self.getData()
 
