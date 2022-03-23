@@ -667,7 +667,7 @@
     id: "einzelansicht"
 
     on_release:
-        lineID = self.parent.getViewIndexAt([0,self.y])
+        lineID = self.parent.get_view_index_at([0,self.y])
         kat = ("ID", "Name", "Typ", "Kategorie", "Raum", "Ausgeliehen", "Status", "Anzahl", "Bemerkung")
         if self.text in kat: app.sorti(self.text)
         else: root.parent.parent.parent.parent.einzelansicht(self.parent.parent.data[lineID].get("text"))
