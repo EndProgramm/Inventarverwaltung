@@ -27,14 +27,13 @@ class Controller:
         return {zeile[0] if len(zeile) > 0 else print(len(zeile)): {i: spalte for i, spalte in enumerate(zeile[1:])} for
                 zeile in erg}#Daten werden fertig formatiert und ans view zurückgegeben
 
-    def saveObject(self, newObject: dict) -> bool:
+    def saveObject(self, newObject: dict) -> str:
         #fügt Werte in die Datenbank hinzu und updated diese
         if newObject.get("ID") is not None:#wenn eine ID mitübergeben wird, soll der Wert in der dATENBANK UPGEDATET WERDEN.
             self.model.updateInventory(str(newObject.get("ID")), newObject.get("name"), newObject.get("typ"),
                                        newObject.get("kategorie"), newObject.get("raum"),
                                        newObject.get("ausgeliehen"), newObject.get("zustand"),
                                        newObject.get("anzahl"), newObject.get("bemerkung"))
-            return True
         else:# wenn nicht, werden erst die Werte geändert, wenn sie nicht den Formatirungsforgaben entspricht.
             if newObject.get("bemerkung")==None or newObject.get("bemerkung")=="None":
                 newObject["bemerkung"]=""
@@ -46,11 +45,12 @@ class Controller:
                 return "Es fehlt der Raum!"
             if newObject.get("kategorie") == "":
                 return "Es fehlt die Kategorie!"
+            #der Datensatz wird zu der Datenbank hinzugefügt und geprüft ob er in der Datenbank drin ist oder ob es einen Fehler gab.
             if not self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
                                                              newObject.get("kategorie"), newObject.get("raum"),
                                                              newObject.get("ausgeliehen"), newObject.get("zustand"),
-                                                             newObject.get("anzahl"), newObject.get("bemerkung"))):#der Datensatz wird zu der Datenbank hinzugefügt und geprüft ob er in der Datenbank drin ist oder ob es einen Fehler gab.
-                return "Fehler!"
+                                                             newObject.get("anzahl"), newObject.get("bemerkung"))):
+                return "Unbekannter Fehler!"
             
     def existsObject(self, ID: int) -> bool:
         #es wird geprüft ob eine ID bereits in der Datenbank gespeichert ist 
@@ -60,6 +60,7 @@ class Controller:
             return True
 
     def getObjectByID(self, ID: int) -> dict:
+        #Der Datensatz mit einer bestimmten ID wird zurückgegeben, wenn er nicht existiert wird ein leerer Datensatz zurückgegeben
         material = self.model.getData(str(ID))
         if material:
             return {'ID': ID, 'name': material[0][1], 'typ': material[0][2], 'kategorie': material[0][3],
@@ -70,14 +71,17 @@ class Controller:
                     'ausgeliehen': "null", 'zustand': "null", 'anzahl': "null", 'bemerkung': "null"}
 
     def delObject(self, ID: int) -> bool:
+        #Ein Datensatz wird mit der angabe der ID dieses Datensatzes gelöscht
         self.model.deleteInventory(ID)
         return self.existsObject(ID)
 
     def getKategorie(self):
+        #Es werden alle Werte, die in der Spalte Kategorie stehen zurückgegeben
         return [i[0] for i in self.model.getKategorien()]
 
     def sortBy(self, sortierung: str) -> dict[dict]:
-        if self.sortierung == sortierung:
+        #Es wird eine nach einer bestimmten Spalte sortierte Tabelle zurückgegeben
+        if self.sortierung == sortierung: #wenn bereits nach der gleichen Spalte sortiert wird, wird die Sortierung umgedreht
             if self.direction == "ASC":
                 self.direction = "DESC"
             else:
@@ -88,6 +92,7 @@ class Controller:
         return self.getData()
 
     def filterSpeichern(self, filterDict: dict[str, str]) -> dict[dict]:
+        #der eingegebene Filter wird gespeichert
         stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg", "funktionsfähig": "True",
                      "defekt": "False"}
         for i in filterDict:
