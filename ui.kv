@@ -4,6 +4,9 @@
 #:import Clock kivy.clock.Clock
 #:import Factory kivy.factory.Factory
 
+#:set fg (0.465, 0.549, 0.629, 1)
+#:set gray (0.533, 0.533, 0.533, 1)
+
 <AddInv>
     GridLayout:
         cols: 1
@@ -13,18 +16,21 @@
             padding: 10
             spacing: 10
             Button:
+                background_color: fg
                 id: "addConsum"
                 text: "Verbrauch"
                 on_release:
                     root.manager.current = "addConsum"
                     root.manager.transition.direction = "right"
             Button:
+                background_color: fg
                 id: "addUses"
                 text: "Gebrauch"
                 on_release:
                     root.manager.current = "addUses"
                     root.manager.transition.direction = "right"
             Button:
+                background_color: fg
                 id: "showButton"
                 text: "Inventar"
                 on_release:
@@ -57,11 +63,13 @@
             TextInput:
                 multiline: False
             Button:
+                background_color: fg
                 text: "<< zurück"
                 on_release:
                     root.manager.current = "addInv"
                     root.manager.transition.direction = "left"
             Button:
+                background_color: fg
                 text: "Speichern"
                 on_release:
                     root.saveInv()
@@ -94,25 +102,27 @@
                 text: "Ausleihbar:"
             CheckBox
             Button:
+                background_color: fg
                 text: "<< zurück"
                 on_release:
                     root.manager.current = "addInv"
                     root.manager.transition.direction = "left"
             Button:
+                background_color: fg
                 text: "Speichern"
                 on_release:
                     root.saveInv()
 
 <Einzelansicht>
-    entry_id: mid
-    entry_name: name
-    entry_anzahl:anzahl
-    entry_kategorie:kategorie
-    entry_ausgeliehen:ausgeliehen
-    entry_bemerkung:bemerkung
-    entry_raum:raum
-    entry_typ: typ
-    entry_zustand:zustand
+    entryId: mid
+    entryName: name
+    entryAnzahl:anzahl
+    entryKategorie:kategorie
+    entryAusgeliehen:ausgeliehen
+    entryBemerkung:bemerkung
+    entryRaum:raum
+    entryTyp: typ
+    entryZustand:zustand
     GridLayout:
         cols:1
         bg: (1,1,1,1)
@@ -205,18 +215,21 @@
             cols: 3
             size_hint: (1.0,0.25)
             Button:
+                background_color: fg
                 id: "showAll"
                 text: "Zurück"
                 on_release:
                     root.closeEinzelansicht()
 
             Button:
+                background_color: fg
                 id: "showAll"
                 text: "Defekt melden"
                 on_release:
                     root.defektmelden()
 
             Button:
+                background_color: fg
                 id: "showAll"
                 text: "Speichern"
                 on_release:
@@ -228,7 +241,7 @@
     Table:
 
 <Table>:
-    id: table_floor
+    id: tableFloor
     orientation: 'vertical'
     padding: (5, 5)
     spacing: 5
@@ -238,7 +251,6 @@
         spacing: 5
         TextInput:
             id: suchfeld
-
             size_hint: 0.3, 1
             size_hint_max_x: 300
 
@@ -248,43 +260,47 @@
 
             on_focus: Clock.schedule_once(lambda dt: self.select_all()) if self.focus else None
             on_text_validate:
-                root.callback_suche(self.text)
+                root.callbackSuche(self.text)
         Button:
             id: suchknopf
+            background_color: gray
             size_hint: 0.1, 1
             size_hint_max_x: 50
             on_release:
-                root.callback_suche(suchfeld.text)
+                root.callbackSuche(suchfeld.text)
             Image:
                 center:  suchknopf.right - suchknopf.width + 24, suchknopf.top - suchknopf.height + 3
                 size: suchknopf.width - 5, suchknopf.height - 5
                 source: 'assets/suchicon.png'
         Button:
+            background_color: fg
             size_hint: 0.1, 1
             size_hint_max_x: 50
             text: "Filter"
             on_release:
                 root.filter()
         Button:
+            background_color: fg
             size_hint: 0.1, 1
             size_hint_max_x: 100
             text: "GG hinzufügen"
             on_release:
-                root.add_GG()
+                root.addGG()
         Button:
+            background_color: fg
             size_hint: 0.1, 1
             size_hint_max_x: 100
             text: "VG hinzufügen"
             on_release:
-                root.add_VG()
+                root.addVG()
 
     BoxLayout:
         RecycleView:
             viewclass: 'CustomLabel'
-            data: root.table_data
-            id: table_floor
+            data: root.tableData
+            id: tableFloor
             RecycleGridLayout:
-                id: table_floor_layout
+                id: tableFloorLayout
                 cols: root.columns
                 default_size: (None,250)
                 default_size_hint: (1,None)
@@ -295,10 +311,10 @@
 <TableBox>:
     RecycleView:
         viewclass: 'CustomLabel'
-        data: root.table_data
-        id: table_floor
+        data: root.tableData
+        id: tableFloor
         RecycleGridLayout:
-            id: table_floor_layout
+            id: tableFloorLayout
             cols: root.columns
             default_size: (None,250)
             default_size_hint: (1,None)
@@ -307,13 +323,13 @@
             spacing: 5
 
 <Popups>
-    typ_spinner: typ
-    kategorie_spinner: kategorie
-    raum_ent: raum
-    zustand_spinner: zustand
-    anzahl_von_ent: anzahl_von
-    anzahl_bis_ent: anzahl_bis
-    ausleihbar_spinner: ausleihbar
+    typSpinner: typ
+    kategorieSpinner: kategorie
+    raumEnt: raum
+    zustandSpinner: zustand
+    anzahlVonEnt: anzahlVon
+    anzahlBisEnt: anzahlBis
+    ausleihbarSpinner: ausleihbar
 
     GridLayout:
         cols: 1
@@ -345,7 +361,7 @@
             Spinner:
                 id: zustand
                 text: "kein Filter"
-                values: "kein Filter", "funktionsfähig", "defekt", "in Reparatur"
+                values: "kein Filter", "funktionsfähig", "defekt"
             Label:
                 text:"Anzahl:"
             BoxLayout:
@@ -354,13 +370,13 @@
                 Label:
                     text:"von"
                 TextInput:
-                    id: anzahl_von
+                    id: anzahlVon
                     multiline: False
 
                 Label:
                     text:"bis"
                 TextInput:
-                    id: anzahl_bis
+                    id: anzahlBis
                     multiline: False
             Label:
                 text: "Ausleihbarkeit:"
@@ -370,25 +386,27 @@
                 values: "kein Filter", "ausleihbar", "ausgeliehen"
 
         Button:
+            background_color: fg
             text: "zurück"
             size_hint: 1, 0.1
             on_release:
-                root.popup_close()
+                root.popupClose()
         Button:
+            background_color: fg
             text: "speichern"
             size_hint: 1, 0.1
             on_release:
-                root.popup_close()
+                root.popupClose()
                 root.refreshTable(root.speichern())
             multiline: False
 
 <PopupAddGG>
-    name_ent: name
-    kategorie_ent: kategorie
-    raum_ent: raum
-    ausleihbar_checkbox: ausleihbar
-    zustand_spinner: zustand
-    bemerkung_ent:bemerkung
+    nameEnt: name
+    kategorieEnt: kategorie
+    raumEnt: raum
+    ausleihbarCheckbox: ausleihbar
+    zustandSpinner: zustand
+    bemerkungEnt:bemerkung
     GridLayout:
         cols: 1
         size: root.width, root.height
@@ -421,7 +439,7 @@
             Spinner:
                 id: zustand
                 text: "funktionsfähig"
-                values: "funktionsfähig", "defekt", "in Reparatur"
+                values: "funktionsfähig", "defekt"
             Label:
                 text: "Bemerkungen:"
             TextInput:
@@ -430,25 +448,27 @@
 
 
         Button:
+            background_color: fg
             text: "zurück"
             size_hint: 1, 0.1
             on_release:
-                root.popup_add_GG_close()
+                root.popupAddGGClose()
         Button:
+            background_color: fg
             text: "speichern"
             size_hint: 1, 0.1
             on_release:
-                root.popup_add_GG_close()
+                root.popupAddGGClose()
                 root.speichern()
             multiline: False
 
 <PopupAddVG>
-    name_ent: name
-    kategorie_ent: kategorie
-    raum_ent: raum
-    anzahl_ent: anzahl
-    zustand_spinner: zustand
-    bemerkung_ent:bemerkung
+    nameEnt: name
+    kategorieEnt: kategorie
+    raumEnt: raum
+    anzahlEnt: anzahl
+    zustandSpinner: zustand
+    bemerkungEnt:bemerkung
     GridLayout:
         cols: 1
         size: root.width, root.height
@@ -477,7 +497,7 @@
             Spinner:
                 id: zustand
                 text: "funktionsfähig"
-                values: "funktionsfähig", "defekt", "in Reparatur"
+                values: "funktionsfähig", "defekt"
             Label:
                 text: "Anzahl"
             TextInput:
@@ -491,25 +511,27 @@
 
 
         Button:
+            background_color: fg
             text: "zurück"
             size_hint: 1, 0.1
             on_release:
-                root.popup_add_VG_close()
+                root.popupAddVGClose()
         Button:
+            background_color: fg
             text: "speichern"
             size_hint: 1, 0.1
             on_release:
-                root.popup_add_VG_close()
+                root.popupAddVGClose()
                 root.speichern()
             multiline: False
 
-<Popup_add_GG>
-    name_ent: name
-    kategorie_ent: kategorie
-    raum_ent: raum
-    ausleihbar_checkbox: ausleihbar
-    zustand_spinner: zustand
-    bemerkung_ent:bemerkung
+<PopupAddGG>
+    nameEnt: name
+    kategorieEnt: kategorie
+    raumEnt: raum
+    ausleihbarCheckbox: ausleihbar
+    zustandSpinner: zustand
+    bemerkungEnt:bemerkung
     GridLayout:
         cols: 1
         size: root.width, root.height
@@ -542,7 +564,7 @@
             Spinner:
                 id: zustand
                 text: "funktionsfähig"
-                values: "funktionsfähig", "defekt", "in Reparatur"
+                values: "funktionsfähig", "defekt"
             Label:
                 text: "Bemerkungen:"
             TextInput:
@@ -551,25 +573,27 @@
 
 
         Button:
+            background_color: fg
             text: "zurück"
             size_hint: 1, 0.1
             on_release:
-                root.popup_add_GG_close()
+                root.popupAddGGClose()
         Button:
+            background_color: fg
             text: "speichern"
             size_hint: 1, 0.1
             on_release:
-                #root.popup_add_GG_close()
+                root.popupAddGGClose()
                 root.speichern()
             multiline: False
 
-<Popup_add_VG>
-    name_ent: name
-    kategorie_ent: kategorie
-    raum_ent: raum
-    anzahl_ent: anzahl
-    zustand_spinner: zustand
-    bemerkung_ent:bemerkung
+<PopupAddVG>
+    nameEnt: name
+    kategorieEnt: kategorie
+    raumEnt: raum
+    anzahlEnt: anzahl
+    zustandSpinner: zustand
+    bemerkungEnt:bemerkung
     GridLayout:
         cols: 1
         size: root.width, root.height
@@ -598,7 +622,7 @@
             Spinner:
                 id: zustand
                 text: "funktionsfähig"
-                values: "funktionsfähig", "defekt", "in Reparatur"
+                values: "funktionsfähig", "defekt"
             Label:
                 text: "Anzahl"
             TextInput:
@@ -612,23 +636,25 @@
 
 
         Button:
+            background_color: fg
             text: "zurück"
             size_hint: 1, 0.1
             on_release:
-                root.popup_add_VG_close()
+                root.popupAddVGClose()
         Button:
+            background_color: fg
             text: "speichern"
             size_hint: 1, 0.1
             on_release:
-                root.popup_add_VG_close()
+                root.popupAddVGClose()
                 root.speichern()
             multiline: False
 
 <CustomLabel@Button>:
-    bcolor: (1, 1, 1, 1)
-    background_color: 1, .3, .4, .85
-    bg: 1,1,1,1
-    bg2: 0,0,0,0
+    bcolor: (0.465, 0.549, 0.629, 1)
+    background_color: fg
+    bg: 0.465, 0.549, 0.629, 1
+    bg2: 0.465, 0.549, 0.629, 1
     canvas.before:
         Color:
             rgba: root.bg
@@ -641,7 +667,7 @@
     id: "einzelansicht"
 
     on_release:
-        lineID = self.parent.get_view_index_at([0,self.y])
-        kat = ("ID", "Name", "Typ", "Kategorie", "Raum", "Ausgeliehen", "Zustand", "Anzahl", "Bemerkung")
-        if self.text in kat: root.parent.parent.parent.parent.sortieren(self.text)
+        lineID = self.parent.getViewIndexAt([0,self.y])
+        kat = ("ID", "Name", "Typ", "Kategorie", "Raum", "Ausgeliehen", "Status", "Anzahl", "Bemerkung")
+        if self.text in kat: app.sorti(self.text)
         else: root.parent.parent.parent.parent.einzelansicht(self.parent.parent.data[lineID].get("text"))
