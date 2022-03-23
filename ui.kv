@@ -668,6 +668,8 @@
 
     on_release:
         lineID = self.parent.get_view_index_at([0,self.y])
-        kat = ("ID", "Name", "Typ", "Kategorie", "Raum", "Ausgeliehen", "Status", "Anzahl", "Bemerkung")
-        if self.text in kat: app.sorti(self.text)
-        else: root.parent.parent.parent.parent.einzelansicht(self.parent.parent.data[lineID].get("text"))
+        # lineID speichert die Tabellen-ID der ID-Spalte einer Zeile in Abhängigkeit der y-Koordinate der Zeile
+        kat = ("ID", "Name", "Typ", "Kategorie", "Raum", "Ausgeliehen", "Zustand", "Anzahl", "Bemerkung")
+        # "parent"-Reihe wird benötigt um von der Viewclass auf die Tabelle zuzugreifen
+        if self.text in kat: root.parent.parent.parent.parent.sortieren(self.text)
+        else: root.parent.parent.parent.parent.einzelansicht(int(self.parent.parent.data[lineID].get("text")))
