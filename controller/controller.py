@@ -137,7 +137,9 @@ class Controller:
         return self.getData()
 
     def getFilter(self):
-        #der Filter wird zurück gegeben und die Formatierung der Datenbank an die Formatierung des Filters angepasst
+        """
+        Der Filter wird zurück gegeben und die Formatierung der Datenbank an die Formatierung des Views angepasst.
+        """
         stehtfuerrueckwarts = {"%": "kein Filter", "Gg": "Gebrauch", "Vg": "Verbrauch", "True": "funktionsfähig",
                                "False": "defekt"}
         filterDict = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
@@ -147,14 +149,17 @@ class Controller:
                 filterDict[i] = stehtfuerrueckwarts[self.filter[i]]
             else:
                 filterDict[i] = self.filter[i]
-        if filterDict["anzahl_von"] == "kein Filter":#im Filter steht wenn die Anzahl nicht angeben wird nichts und nicht kein Filter wie bei den anderen
+        #Im Filter steht wenn die Anzahl nicht angeben wird nichts und nicht kein Filter wie bei den anderen
+        if filterDict["anzahl_von"] == "kein Filter":
             filterDict["anzahl_von"] = ""
         if filterDict["anzahl_bis"] == "kein Filter":
             filterDict["anzahl_bis"] = ""
         return filterDict
 
     def defektmelden(self, mID):
-        #in der Datenbank wird bei einer bestimmten ID der Zustand oder Status in defekt geändert
+        """
+        Für die gegebene ID, wird der dazugehörige Datensatz auf defekt geändert.
+        """
         x = self.model.filterAll(mID, "%", "%", "%", "%", "%", "%", "%", "%", self.sortierung, self.direction)
         self.model.updateInventory(mID, x[0][1], x[0][2], x[0][3], x[0][4], x[0][5], "False", x[0][7], x[0][8])
 
