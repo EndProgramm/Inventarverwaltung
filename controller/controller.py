@@ -118,7 +118,7 @@ class Controller:
                 filterDict[i] = stehtfuerrueckwarts[self.filter[i]]
             else:
                 filterDict[i] = self.filter[i]
-        if filterDict["anzahl_von"] == "kein Filter":im Filter steht wenn die Anzahl nicht angeben wird nichts und nicht kein Filter wie bei den anderen
+        if filterDict["anzahl_von"] == "kein Filter":#im Filter steht wenn die Anzahl nicht angeben wird nichts und nicht kein Filter wie bei den anderen
             filterDict["anzahl_von"] = ""
         if filterDict["anzahl_bis"] == "kein Filter":
             filterDict["anzahl_bis"] = ""
