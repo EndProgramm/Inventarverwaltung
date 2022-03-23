@@ -5,6 +5,7 @@
 Beschreibung: \n
 Basis der UI, implementiert mit UIApp
 """
+import time
 
 from kivy.app import App
 from kivy.uix.popup import Popup
@@ -35,10 +36,11 @@ class AddConsum(Screen):
         popup.open()
 
 
-class Popups(FloatLayout):
+class Popups(FloatLayout): # Popup von Button 'Filter'
     popupClose = ObjectProperty(None)
     refreshTable = ObjectProperty(None)
 
+    # Eingabe wird gespeichert:
     typSpinner = ObjectProperty()
     kategorieSpinner = ObjectProperty()
     raumEnt = ObjectProperty()
@@ -47,7 +49,7 @@ class Popups(FloatLayout):
     anzahlBisEnt = ObjectProperty()
     ausleihbarSpinner = ObjectProperty()
 
-    def kategorie(self):
+    def kategorie(self): # gibt alle Kategorien zurück
         return control.getKategorie()
 
     def speichern(self):
@@ -83,10 +85,10 @@ class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand
             "bemerkung": self.bemerkungEnt.text
         }
         control.saveObject(dict)
-        c = control.saveObject(dict)
-        if type(c) == str:
+        fehlermeldung = control.saveObject(dict)
+        if fehlermeldung:
             popup = Popup(title='Fehler', title_align="center",
-                          content=Label(text=c),
+                          content=Label(text=fehlermeldung),
                           size_hint=(None, None), size=(200, 100))
             popup.open()
 
