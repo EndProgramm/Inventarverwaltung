@@ -46,7 +46,7 @@ class Controller:
             if newObject.get("kategorie") == "":
                 return "Es fehlt die Kategorie!"
             #der Datensatz wird zu der Datenbank hinzugefügt und geprüft ob er in der Datenbank drin ist oder ob es einen Fehler gab.
-            if not self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
+            if self.existsObject(self.model.addInventory(newObject.get("name"), newObject.get("typ"),
                                                              newObject.get("kategorie"), newObject.get("raum"),
                                                              newObject.get("ausgeliehen"), newObject.get("zustand"),
                                                              newObject.get("anzahl"), newObject.get("bemerkung"))):
@@ -94,8 +94,8 @@ class Controller:
     def filterSpeichern(self, filterDict: dict[str, str]) -> dict[dict]:
         #der eingegebene Filter wird gespeichert
         stehtfuer = {"kein Filter": "%", "": "%", "Gebrauch": "Gg", "Verbrauch": "Vg", "funktionsfähig": "True",
-                     "defekt": "False"}
-        for i in filterDict:
+                     "defekt": "False"}#Dict in dem Werte die der Filter zurück gibt in Werte umwandelt, die mit den Formatierungsvorgaben der Datenbank übereinstimmen
+        for i in filterDict:#filter wird durchlaufen und Werte den Vorgaben entsprechend verändert
             if filterDict[i] in stehtfuer:
                 self.filter[i] = stehtfuer[filterDict[i]]
             else:
@@ -103,10 +103,12 @@ class Controller:
         return self.getData()
 
     def suche(self, suchbegriff: str) -> dict[dict]:
+        #der Suchbegriff wird gespeichert und die Tabelle, bei der die Suche angewandt wurde, zurück gegeben
         self.such = f"%{suchbegriff}%"
         return self.getData()
 
     def getFilter(self):
+        #der Filter wird zurück gegeben und die Formatierung der Datenbank an die Formatierung des Filters angepasst
         stehtfuerrueckwarts = {"%": "kein Filter", "Gg": "Gebrauch", "Vg": "Verbrauch", "True": "funktionsfähig",
                                "False": "defekt"}
         filterDict = {'typ': '%', 'kategorie': '%', 'raum': '%', 'zustand': '%', 'anzahl_von': '%', 'anzahl_bis': '%',
@@ -116,13 +118,14 @@ class Controller:
                 filterDict[i] = stehtfuerrueckwarts[self.filter[i]]
             else:
                 filterDict[i] = self.filter[i]
-        if filterDict["anzahl_von"] == "kein Filter":
+        if filterDict["anzahl_von"] == "kein Filter":im Filter steht wenn die Anzahl nicht angeben wird nichts und nicht kein Filter wie bei den anderen
             filterDict["anzahl_von"] = ""
         if filterDict["anzahl_bis"] == "kein Filter":
             filterDict["anzahl_bis"] = ""
         return filterDict
 
     def defektmelden(self, mID):
+        #in der Datenbank wird
         x = self.model.filterAll(mID, "%", "%", "%", "%", "%", "%", "%", "%", self.sortierung, self.direction)
         self.model.updateInventory(mID, x[0][1], x[0][2], x[0][3], x[0][4], x[0][5], "False", x[0][7], x[0][8])
 
