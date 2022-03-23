@@ -1,4 +1,4 @@
-k# -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 # Controller für die Inventarverwaltung
 
 from model.model import Model
