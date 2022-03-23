@@ -5,6 +5,7 @@
 Beschreibung: \n
 Basis der UI, implementiert mit UIApp
 """
+import time
 
 from kivy.app import App
 from kivy.uix.popup import Popup
@@ -35,10 +36,11 @@ class AddConsum(Screen):
         popup.open()
 
 
-class Popups(FloatLayout):
+class Popups(FloatLayout): # Popup von Button 'Filter'
     popupClose = ObjectProperty(None)
     refreshTable = ObjectProperty(None)
 
+    # Eingabe wird gespeichert:
     typSpinner = ObjectProperty()
     kategorieSpinner = ObjectProperty()
     raumEnt = ObjectProperty()
@@ -47,10 +49,11 @@ class Popups(FloatLayout):
     anzahlBisEnt = ObjectProperty()
     ausleihbarSpinner = ObjectProperty()
 
-    def kategorie(self):
+    def kategorie(self): # gibt alle Kategorien zurück
         return control.getKategorie()
 
     def speichern(self):
+        # ausgewählte Filter werden gespeichert
         dict = {
             "typ": self.typSpinner.text,
             "kategorie": self.kategorieSpinner.text,
@@ -60,11 +63,13 @@ class Popups(FloatLayout):
             "anzahl_bis": self.anzahlBisEnt.text,
             "ausleibahrkeit": self.ausleihbarSpinner.text
         }
-        return control.filterSpeichern(dict)
+        return control.filterSpeichern(dict) #In der Datenbank wird mit Filtern gesucht
 
 
-class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand
+class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand hinzufügen
     popupAddGGClose = ObjectProperty(None)
+
+    # Eingabe wird gespeichert:
     nameEnt = ObjectProperty()
     kategorieEnt = ObjectProperty()
     raumEnt = ObjectProperty()
@@ -82,11 +87,10 @@ class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand
             "zustand": self.zustandSpinner.text,
             "bemerkung": self.bemerkungEnt.text
         }
-        control.saveObject(dict)
-        c = control.saveObject(dict)
-        if type(c) == str:
+        fehlermeldung = control.saveObject(dict)
+        if fehlermeldung:
             popup = Popup(title='Fehler', title_align="center",
-                          content=Label(text=c),
+                          content=Label(text=fehlermeldung),
                           size_hint=(None, None), size=(200, 100))
             popup.open()
 
@@ -110,11 +114,10 @@ class PopupAddVG(FloatLayout):  # Verbrauchsgegenstand
             "zustand": self.zustandSpinner.text,
             "bemerkung": self.bemerkungEnt.text
         }
-        control.saveObject(dict)
-        c = control.saveObject(dict)
-        if type(c) == str:
+        fehlermeldung = control.saveObject(dict)
+        if fehlermeldung:
             popup = Popup(title='Fehler', title_align="center",
-                          content=Label(text=c),
+                          content=Label(text=fehlermeldung),
                           size_hint=(None, None), size=(200, 100))
             popup.open()
 
