@@ -53,6 +53,7 @@ class Popups(FloatLayout): # Popup von Button 'Filter'
         return control.getKategorie()
 
     def speichern(self):
+        # ausgewählte Filter werden gespeichert
         dict = {
             "typ": self.typSpinner.text,
             "kategorie": self.kategorieSpinner.text,
@@ -62,11 +63,13 @@ class Popups(FloatLayout): # Popup von Button 'Filter'
             "anzahl_bis": self.anzahlBisEnt.text,
             "ausleibahrkeit": self.ausleihbarSpinner.text
         }
-        return control.filterSpeichern(dict)
+        return control.filterSpeichern(dict) #In der Datenbank wird mit Filtern gesucht
 
 
-class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand
+class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand hinzufügen
     popupAddGGClose = ObjectProperty(None)
+
+    # Eingabe wird gespeichert:
     nameEnt = ObjectProperty()
     kategorieEnt = ObjectProperty()
     raumEnt = ObjectProperty()
@@ -84,7 +87,6 @@ class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand
             "zustand": self.zustandSpinner.text,
             "bemerkung": self.bemerkungEnt.text
         }
-        control.saveObject(dict)
         fehlermeldung = control.saveObject(dict)
         if fehlermeldung:
             popup = Popup(title='Fehler', title_align="center",
@@ -112,11 +114,10 @@ class PopupAddVG(FloatLayout):  # Verbrauchsgegenstand
             "zustand": self.zustandSpinner.text,
             "bemerkung": self.bemerkungEnt.text
         }
-        control.saveObject(dict)
-        c = control.saveObject(dict)
-        if type(c) == str:
+        fehlermeldung = control.saveObject(dict)
+        if fehlermeldung:
             popup = Popup(title='Fehler', title_align="center",
-                          content=Label(text=c),
+                          content=Label(text=fehlermeldung),
                           size_hint=(None, None), size=(200, 100))
             popup.open()
 
