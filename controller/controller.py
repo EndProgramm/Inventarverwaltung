@@ -104,6 +104,8 @@ class Controller:
         ASC -> DESC
         DESC -> ASC
         """
+        if sortierung=="ID":
+            sortierung="MID"
         if self.sortierung == sortierung:
             if self.direction == "ASC":
                 self.direction = "DESC"
