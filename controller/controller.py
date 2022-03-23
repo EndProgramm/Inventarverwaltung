@@ -125,7 +125,7 @@ class Controller:
         return filterDict
 
     def defektmelden(self, mID):
-        #in der Datenbank wird
+        #in der Datenbank wird bei einer bestimmten ID der Zustand oder Status in defekt geändert
         x = self.model.filterAll(mID, "%", "%", "%", "%", "%", "%", "%", "%", self.sortierung, self.direction)
         self.model.updateInventory(mID, x[0][1], x[0][2], x[0][3], x[0][4], x[0][5], "False", x[0][7], x[0][8])
 
