@@ -126,7 +126,7 @@ class ShowAll(Screen):
     pass
 
 class Einzelansicht(FloatLayout):
-    # self.texte: dict[str, any] = {'None': None}
+    # IDs der Eingabefelder aus kv
     closeEinzelansicht = ObjectProperty(None)
     entryId = ObjectProperty()
     entryName = ObjectProperty()
@@ -138,18 +138,18 @@ class Einzelansicht(FloatLayout):
     entryTyp = ObjectProperty()
     entryZustand = ObjectProperty()
 
-    def entryFill(self):
-        global mid
-        self.texte = control.getObjectByID(int(mid))
-        self.entryId.text = str(self.texte.get("ID", "None"))
-        self.entryName.text = str(self.texte.get("name", "None"))
-        self.entryRaum.text = str(self.texte.get("raum", "None"))
-        self.entryTyp.text = str(self.texte.get("typ", "None"))
-        self.entryKategorie.text = str(self.texte.get("kategorie", "None"))
-        self.entryAusgeliehen.text = str(self.texte.get("ausgeliehen", "None"))
-        self.entryZustand.text = str(self.texte.get("zustand", "None"))
-        self.entryAnzahl.text = str(self.texte.get("anzahl", "None"))
-        self.entryBemerkung.text = str(self.texte.get("bemerkung", "None"))
+    def einfuegenWerte(self, mid: int):
+        # Füllt alle Felder der Einzelansicht mit den Attributen des Objektes aus.
+        self.attribute = control.getObjectByID(mid)
+        self.entryId.text = str(self.attribute.get("ID", "None"))
+        self.entryName.text = str(self.attribute.get("name", "None"))
+        self.entryRaum.text = str(self.attribute.get("raum", "None"))
+        self.entryTyp.text = str(self.attribute.get("typ", "None"))
+        self.entryKategorie.text = str(self.attribute.get("kategorie", "None"))
+        self.entryAusgeliehen.text = str(self.attribute.get("ausgeliehen", "None"))
+        self.entryZustand.text = str(self.attribute.get("zustand", "None"))
+        self.entryAnzahl.text = str(self.attribute.get("anzahl", "None"))
+        self.entryBemerkung.text = str(self.attribute.get("bemerkung", "None"))
 
     def speichern(self):
         dataNew = {'ID': int(self.entryId.text),
@@ -167,7 +167,7 @@ class Einzelansicht(FloatLayout):
         return control.getKategorie()
 
     def defektmelden(self):
-        # control.defektmelden(int(self.ids.entryId.text))
+        # wird später benötigt
         pass
 
 
@@ -225,15 +225,14 @@ class Table(BoxLayout):
         self.clear_widgets(self.children[:1])
         self.add_widget(TableBox(self.tableData, self.columns))
 
-    def einzelansicht(self, idInput):
-        global mid
-        mid = idInput
+    def einzelansicht(self, idInput: int):
+        # Popup für die Einzelansicht wird geöffnet, id der Zeile wird gespeichert
         show = Einzelansicht(closeEinzelansicht=self.closeEinzelansicht)
         self.popupEinzelansicht = Popup(title="Einzelansicht", title_align="center",
                                         content=show, auto_dismiss=True,
                                         size_hint=(None, None), size=(600, 400))
         self.popupEinzelansicht.open()
-        show.entryFill()
+        show.einfuegenWerte(idInput)
 
     def filter(self):
         show = Popups(popupClose=self.popupClose, refreshTable=self.refreshTable)
@@ -270,6 +269,7 @@ class Table(BoxLayout):
         self.refreshTable(control.getData())
 
     def sortieren(self, spalte: str):
+        # Tabelle wird sortiert in Abhängigkeit der ausgewählten Spalte
         table = control.sortBy(spalte)
         self.refreshTable(table)
 
