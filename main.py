@@ -93,7 +93,12 @@ class PopupAddGG(FloatLayout):  # Gebrauchsgegenstand
             "bemerkung": self.bemerkung_ent.text
         }
         control.saveObject(dict)
-
+        c = control.saveObject(dict)
+        if type(c) == str:
+            popup = Popup(title='Fehler', title_align="center",
+                          content=Label(text=c),
+                          size_hint=(None, None), size=(200, 100))
+            popup.open()
 
 
 class PopupAddVG(FloatLayout):  # Verbrauchsgegenstand
@@ -116,6 +121,12 @@ class PopupAddVG(FloatLayout):  # Verbrauchsgegenstand
             "bemerkung": self.bemerkung_ent.text
         }
         control.saveObject(dict)
+        c = control.saveObject(dict)
+        if type(c) == str:
+            popup = Popup(title='Fehler', title_align="center",
+                          content=Label(text=c),
+                          size_hint=(None, None), size=(200, 100))
+            popup.open()
 
 
 class ShowAll(Screen):

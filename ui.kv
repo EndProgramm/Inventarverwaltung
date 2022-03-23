@@ -542,7 +542,7 @@
             Spinner:
                 id: zustand
                 text: "funktionsfähig"
-                values: "funktionsfähig", "defekt"
+                values: "funktionsfähig", "defekt", "in Reparatur"
             Label:
                 text: "Bemerkungen:"
             TextInput:
@@ -559,7 +559,7 @@
             text: "speichern"
             size_hint: 1, 0.1
             on_release:
-                root.popup_add_GG_close()
+                #root.popup_add_GG_close()
                 root.speichern()
             multiline: False
 
@@ -598,7 +598,7 @@
             Spinner:
                 id: zustand
                 text: "funktionsfähig"
-                values: "funktionsfähig", "defekt"
+                values: "funktionsfähig", "defekt", "in Reparatur"
             Label:
                 text: "Anzahl"
             TextInput:
